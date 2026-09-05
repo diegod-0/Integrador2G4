@@ -1,0 +1,15 @@
+# Archivos y carpetas privadas del equipo (se gestionan en local / privado)
+**/APF-Avances/
+**/GUIA-Desarrollo/
+**/PLAN-DE-GESTION-PROJECTS-DIEGO.md
+
+# Dependencias y compilación (previsión)
+node_modules/
+.angular/
+dist/
+target/
+.idea/
+.vscode/
+*.log
+.DS_Store
+Thumbs.db
