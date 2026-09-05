@@ -2,7 +2,7 @@
 
 [![UTP](https://img.shields.io/badge/Universidad-UTP-red?style=for-the-badge)](https://www.utp.edu.pe/)
 [![Curso](https://img.shields.io/badge/Curso-Integrador_II:_Software-0A66C2?style=for-the-badge)](https://www.utp.edu.pe/)
-[![Ciclo](https://img.shields.io/badge/Ciclo-2026--I-green?style=for-the-badge)]()
+[![Ciclo](https://img.shields.io/badge/Ciclo-2026--II-green?style=for-the-badge)]()
 [![Metodología](https://img.shields.io/badge/Metodología-Scrum_/_Agile-orange?style=for-the-badge)]()
 
 ---
