@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-report-container',
   standalone: true,
-  imports: [RouterLink],
   template: `
     <div class="container section-padding">
       <div class="module-header">
