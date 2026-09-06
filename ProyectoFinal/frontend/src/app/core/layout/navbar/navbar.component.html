@@ -1,0 +1,44 @@
+<header class="navbar">
+  <div class="container navbar-container">
+    <a routerLink="/" (click)="closeMenu()" class="navbar-brand">
+      <span class="brand-icon">🐾</span>
+      <span class="brand-text">Rescue<span class="brand-highlight">Link</span></span>
+    </a>
+
+    <button 
+      type="button" 
+      class="mobile-toggle" 
+      (click)="toggleMenu()"
+      aria-label="Abrir menú de navegación"
+      [attr.aria-expanded]="isMenuOpen()">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
+    <nav class="nav-menu" [class.nav-menu-open]="isMenuOpen()">
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a routerLink="/catalogo" routerLinkActive="active" (click)="closeMenu()" class="nav-link">
+            Catálogo
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/matchmaker" routerLinkActive="active" (click)="closeMenu()" class="nav-link">
+            Matchmaker ✨
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/tracking" routerLinkActive="active" (click)="closeMenu()" class="nav-link">
+            Rescue Tracker 📍
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/reportar" routerLinkActive="active" (click)="closeMenu()" class="btn btn-secondary nav-cta">
+            🚨 Reportar Emergencia
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
