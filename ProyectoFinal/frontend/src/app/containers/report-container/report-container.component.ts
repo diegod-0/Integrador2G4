@@ -1,36 +1,105 @@
-import { Component } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { GeolocationService } from '../../services/geolocation.service';
+import { ReportFormComponent } from '../../components/report/report-form/report-form.component';
+import { EmergencyReportPayload, TicketRescate } from '../../models/emergency-report.model';
+import { ViewState } from '../../models/view-state.model';
 
 @Component({
   selector: 'app-report-container',
   standalone: true,
-  template: `
-    <div class="container section-padding">
-      <div class="module-header">
-        <span class="badge badge-danger">HU01 · 8 Story Points</span>
-        <h1>🚨 Reporte Ágil de Emergencias</h1>
-        <p class="subtitle">Captura automática de coordenadas GPS, fotografía del animal y generación de ticket de auxilio.</p>
-        <div class="lead-badge">
-          <span>Responsable:</span> <strong>Diego Claros (Scrum Master & Lead Architect)</strong>
-        </div>
-      </div>
-
-      <div class="card placeholder-card">
-        <div class="card-icon">📍</div>
-        <h3>Módulo Base Inicializado</h3>
-        <p>El andamiaje de este contenedor está preparado. En la rama <code>feat/HU-01-reporte-agil-gps</code> se implementará el formulario reactivo con captura de geolocalización del navegador y subida de fotografías.</p>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .section-padding { padding-top: var(--space-2xl); padding-bottom: var(--space-2xl); }
-    .module-header { margin-bottom: var(--space-xl); }
-    .subtitle { color: var(--text-secondary); font-size: 1.1rem; margin-top: var(--space-xs); }
-    .lead-badge { margin-top: var(--space-md); font-size: 0.95rem; color: var(--color-primary-light); }
-    .placeholder-card { text-align: center; padding: var(--space-2xl); max-width: 640px; margin: 0 auto; }
-    .card-icon { font-size: 3rem; margin-bottom: var(--space-md); }
-    .placeholder-card h3 { margin-bottom: var(--space-sm); }
-    .placeholder-card p { color: var(--text-secondary); font-size: 0.95rem; }
-    code { background: rgba(255,255,255,0.1); padding: 0.2rem 0.4rem; border-radius: var(--radius-sm); color: var(--color-secondary); }
-  `]
+  imports: [CommonModule, ReportFormComponent],
+  templateUrl: './report-container.component.html',
+  styleUrl: './report-container.component.css'
 })
-export class ReportContainerComponent {}
+export class ReportContainerComponent {
+  private readonly geoService = inject(GeolocationService);
+  private readonly router = inject(Router);
+
+  // Estado del flujo del contenedor mediante Signals
+  readonly viewState = signal<ViewState<null>>({ status: 'idle' });
+
+  // Señales expuestas hacia el Dumb Component
+  readonly gpsState = this.geoService.state;
+  readonly currentCoordinates = this.geoService.coordinates;
+  readonly availableDistricts = computed(() =>
+    this.geoService.availableDistricts.map(d => d.nombre)
+  );
+
+  onGpsRequested(): void {
+    this.geoService.requestCurrentPosition();
+  }
+
+  onDistrictSelected(districtName: string): void {
+    this.geoService.setManualDistrict(districtName);
+  }
+
+  onReportSubmitted(payload: EmergencyReportPayload): void {
+    this.viewState.set({ status: 'loading' });
+
+    // Simulación de latencia de red (350 ms)
+    setTimeout(() => {
+      const ticketCode = 'TICK-' + Math.floor(1000 + Math.random() * 9000);
+
+      const newTicket: TicketRescate = {
+        id: typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(),
+        codigoSeguimiento: ticketCode,
+        reportanteNombre: payload.reporterName,
+        reportanteTelefono: payload.reporterPhone,
+        coordenadas: payload.coordinates,
+        direccionReferencia: payload.referenceAddress,
+        fotoUrl: payload.imageUrl,
+        nivelUrgencia: payload.urgencyLevel,
+        estado: 'PENDIENTE',
+        fechaCreacion: new Date().toISOString(),
+        historial: [
+          {
+            estado: 'PENDIENTE',
+            titulo: 'Emergencia Reportada',
+            descripcion: 'Alerta registrada por ciudadano. Notificando a albergues y voluntarios en la zona.',
+            completado: true,
+            actual: true,
+            fechaHora: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          },
+          {
+            estado: 'ASIGNADO',
+            titulo: 'Albergue Asignado',
+            descripcion: 'Albergue con cupos disponibles aceptó la recepción del caso.',
+            completado: false,
+            actual: false
+          },
+          {
+            estado: 'EN_CAMINO',
+            titulo: 'Rescatista en Camino',
+            descripcion: 'Voluntario desplazándose a las coordenadas GPS.',
+            completado: false,
+            actual: false
+          },
+          {
+            estado: 'RESCATADO',
+            titulo: 'Animal Asegurado y a Salvo',
+            descripcion: 'Ingreso al refugio y triaje médico veterinario.',
+            completado: false,
+            actual: false
+          }
+        ]
+      };
+
+      // Persistencia en localStorage para que el módulo de Pedro Cueto (HU02 /tracking) lo lea de inmediato
+      try {
+        const raw = localStorage.getItem('rescuelink_tickets');
+        const existing: TicketRescate[] = raw ? JSON.parse(raw) : [];
+        existing.unshift(newTicket);
+        localStorage.setItem('rescuelink_tickets', JSON.stringify(existing));
+      } catch (e) {
+        console.warn('No se pudo persistir en localStorage:', e);
+      }
+
+      this.viewState.set({ status: 'success', data: null });
+
+      // Redirección reactiva al Rescue Tracker
+      this.router.navigate(['/tracking', ticketCode]);
+    }, 350);
+  }
+}

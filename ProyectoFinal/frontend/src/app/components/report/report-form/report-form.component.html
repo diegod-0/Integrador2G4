@@ -1,0 +1,245 @@
+<form [formGroup]="form" (ngSubmit)="submit()" class="report-form card" novalidate>
+  <div class="form-header">
+    <h2 class="form-title">Formulario de alerta comunitaria</h2>
+    <p class="form-subtitle">Los reportes son procesados por albergues y voluntarios cercanos en tiempo real.</p>
+  </div>
+
+  <!-- SECCIÓN 1: DATOS DEL REPORTANTE -->
+  <fieldset class="form-section">
+    <legend class="section-legend">1. Datos de contacto</legend>
+
+    <div class="form-grid">
+      <!-- Nombre -->
+      <div class="form-group">
+        <label for="reporterName" class="form-label">
+          Nombre completo <span class="required">*</span>
+        </label>
+        <input id="reporterName" type="text" class="form-control" formControlName="reporterName"
+          placeholder="Ej. Juan Pérez" [attr.aria-invalid]="f['reporterName'].touched && f['reporterName'].invalid"
+          aria-describedby="nameError" />
+        @if (f['reporterName'].touched && f['reporterName'].errors) {
+        <span id="nameError" class="field-error" role="alert">
+          @if (f['reporterName'].errors['required']) { El nombre es obligatorio. }
+          @if (f['reporterName'].errors['minlength']) { Debe tener al menos 3 caracteres. }
+        </span>
+        }
+      </div>
+
+      <!-- Celular (9 dígitos peruano) -->
+      <div class="form-group">
+        <label for="reporterPhone" class="form-label">
+          Número de WhatsApp / Celular <span class="required">*</span>
+        </label>
+        <div class="phone-input-wrapper">
+          <span class="phone-prefix">🇵🇪 +51</span>
+          <input id="reporterPhone" type="tel" class="form-control phone-input" formControlName="reporterPhone"
+            placeholder="9XXXXXXXX" maxlength="9"
+            [attr.aria-invalid]="f['reporterPhone'].touched && f['reporterPhone'].invalid"
+            aria-describedby="phoneError" />
+        </div>
+        @if (f['reporterPhone'].touched && f['reporterPhone'].errors) {
+        <span id="phoneError" class="field-error" role="alert">
+          @if (f['reporterPhone'].errors['required']) { El número de WhatsApp es obligatorio. }
+          @if (f['reporterPhone'].errors['pattern']) { Ingrese un celular peruano válido de 9 dígitos que inicie con 9.
+          }
+        </span>
+        }
+      </div>
+    </div>
+  </fieldset>
+
+  <!-- SECCIÓN 2: UBICACIÓN Y GPS -->
+  <fieldset class="form-section">
+    <legend class="section-legend">2. Ubicación de la emergencia</legend>
+
+    <!-- Caja de Control GPS -->
+    <div class="gps-control-card">
+      <div class="gps-info">
+        <div class="gps-icon-wrapper">
+          <span class="gps-icon">📍</span>
+        </div>
+        <div>
+          <h4 class="gps-title">Geolocalización automática</h4>
+          <p class="gps-desc">Permite calcular la distancia al rescatista más cercano.</p>
+        </div>
+      </div>
+
+      <div class="gps-actions">
+        <button type="button" class="btn btn-outline btn-gps" (click)="onRequestGps.emit()"
+          [disabled]="gpsState().status === 'requesting' || isSubmitting()">
+          @if (gpsState().status === 'requesting') {
+          <span class="spinner-inline"></span> Obteniendo GPS...
+          } @else if (currentCoordinates()) {
+          🔄 Actualizar mi GPS
+          } @else {
+          📍 Usar mi ubicación actual
+          }
+        </button>
+      </div>
+    </div>
+
+    <!-- Feedback del estado GPS y Mini-Mapa Interactivo -->
+    <div class="gps-feedback">
+      @if (currentCoordinates(); as coords) {
+      <div class="alert alert-success">
+        <span>✅ <strong>Ubicación fijada:</strong> Lat {{ coords.latitude | number:'1.4-4' }}, Lng {{ coords.longitude |
+          number:'1.4-4' }} (Precisión: ±{{ coords.accuracyMeters }}m)</span>
+      </div>
+
+      @if (mapUrl()) {
+      <div class="map-preview-card">
+        <div class="map-preview-header">
+          <span class="map-live-tag"><span class="radar-dot"></span> Radar GPS Activo</span>
+          <span class="map-zoom-hint">OpenStreetMap &bull; Lima Metropolitana</span>
+        </div>
+        <div class="map-iframe-wrapper">
+          <iframe [src]="mapUrl()" title="Vista previa del mapa de la emergencia" class="map-iframe" loading="lazy"
+            aria-label="Mapa de la ubicación de la emergencia"></iframe>
+        </div>
+      </div>
+      }
+      }
+
+      @if (gpsState().status === 'denied' || gpsState().status === 'error') {
+      <div class="alert alert-warning">
+        <span>⚠️ <strong>Contingencia GPS:</strong> Selecciona el distrito de Lima donde se encuentra el animal:</span>
+        <div class="district-selector">
+          <select class="form-control" (change)="onDistrictChange($event)">
+            <option value="">-- Elige un distrito de contingencia --</option>
+            @for (dist of availableDistricts(); track dist) {
+            <option [value]="dist">{{ dist }}</option>
+            }
+          </select>
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- Dirección o referencia -->
+    <div class="form-group" style="margin-top: 1rem;">
+      <label for="referenceAddress" class="form-label">
+        Dirección exacta o punto de referencia <span class="required">*</span>
+      </label>
+      <input id="referenceAddress" type="text" class="form-control" formControlName="referenceAddress"
+        placeholder="Ej. Frente al Parque Kennedy, esquina con Av. Larco"
+        [attr.aria-invalid]="f['referenceAddress'].touched && f['referenceAddress'].invalid"
+        aria-describedby="addressError" />
+      @if (f['referenceAddress'].touched && f['referenceAddress'].errors) {
+      <span id="addressError" class="field-error" role="alert">
+        @if (f['referenceAddress'].errors['required']) { La dirección de referencia es obligatoria. }
+        @if (f['referenceAddress'].errors['minlength']) { Ingrese al menos 5 caracteres descriptivos. }
+      </span>
+      }
+    </div>
+  </fieldset>
+
+  <!-- SECCIÓN 3: EVIDENCIA VISUAL Y ESTADO -->
+  <fieldset class="form-section">
+    <legend class="section-legend">3. Fotografía y nivel de urgencia</legend>
+
+    <!-- Nivel de Urgencia -->
+    <div class="form-group">
+      <label class="form-label">Nivel de urgencia estimado</label>
+      <div class="urgency-grid">
+        <label class="urgency-card" [class.selected]="form.value.urgencyLevel === 'BAJA'">
+          <input type="radio" formControlName="urgencyLevel" value="BAJA" class="visually-hidden" />
+          <span class="urgency-dot dot-baja"></span>
+          <div>
+            <strong>Baja</strong>
+            <small>Animal desorientado o en abandono sin heridas visibles.</small>
+          </div>
+        </label>
+
+        <label class="urgency-card" [class.selected]="form.value.urgencyLevel === 'MEDIA'">
+          <input type="radio" formControlName="urgencyLevel" value="MEDIA" class="visually-hidden" />
+          <span class="urgency-dot dot-media"></span>
+          <div>
+            <strong>Media</strong>
+            <small>Animal desnutrido, con sarna o dificultad para caminar.</small>
+          </div>
+        </label>
+
+        <label class="urgency-card" [class.selected]="form.value.urgencyLevel === 'CRITICA'">
+          <input type="radio" formControlName="urgencyLevel" value="CRITICA" class="visually-hidden" />
+          <span class="urgency-dot dot-critica"></span>
+          <div>
+            <strong>Crítica</strong>
+            <small>Atropello, hemorragia activa o riesgo inminente de vida.</small>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Fotografía con Upload & Preview -->
+    <div class="form-group">
+      <label for="photoFile" class="form-label">
+        Fotografía del animal <span class="required">* (Máx. 5 MB)</span>
+      </label>
+
+      @if (!imagePreview()) {
+      <div class="upload-dropzone" [class.dragging]="isDragging()" (dragover)="onDragOver($event)"
+        (dragleave)="onDragLeave($event)" (drop)="onFileDropped($event)">
+        <input id="photoFile" type="file" accept="image/png, image/jpeg, image/webp" (change)="onFileSelected($event)"
+          class="file-input-hidden" />
+        <label for="photoFile" class="dropzone-label">
+          @if (isCompressing()) {
+          <span class="spinner-inline" style="width: 2rem; height: 2rem; border-width: 3px;"></span>
+          <span class="upload-prompt"><strong>Optimizando y reduciendo imagen...</strong></span>
+          <span class="upload-hint">Comprimiendo en el navegador para prevenir sobrecarga de red</span>
+          } @else {
+          <span class="upload-icon">📷</span>
+          <span class="upload-prompt">
+            @if (isDragging()) {
+            <strong>¡Suelta la fotografía aquí!</strong>
+            } @else {
+            <strong>Haz clic para subir</strong> o arrastra una foto
+            }
+          </span>
+          <span class="upload-hint">Formatos: JPG, PNG o WEBP (Máx. 5 MB - Se auto-optimiza)</span>
+          }
+        </label>
+      </div>
+      } @else {
+      <div class="image-preview-container">
+        <img [src]="imagePreview()" alt="Previsualización de la mascota reportada" class="image-preview" />
+        @if (compressionStats(); as stats) {
+        <div class="compression-badge">
+          <span>⚡ Imagen optimizada: <strong>{{ stats.compressedKb }} KB</strong> (original: {{ stats.originalKb }} KB,
+            <strong>-{{ stats.ratioPercent }}%</strong>)</span>
+        </div>
+        }
+        <button type="button" (click)="removeImage()" class="btn-remove-image" aria-label="Eliminar fotografía">
+          ✕ Quitar Foto
+        </button>
+      </div>
+      }
+
+      @if (imageError()) {
+      <span class="field-error" role="alert">{{ imageError() }}</span>
+      }
+    </div>
+
+    <!-- Descripción Opcional -->
+    <div class="form-group">
+      <label for="conditionDescription" class="form-label">
+        Detalles adicionales del estado del animal (Opcional)
+      </label>
+      <textarea id="conditionDescription" rows="3" class="form-control" formControlName="conditionDescription"
+        placeholder="Ej. Es un perrito mestizo mediano, parece asustado y cojea de la pata trasera..."></textarea>
+    </div>
+  </fieldset>
+
+  <!-- BOTÓN DE ENVÍO -->
+  <div class="form-actions">
+    <button type="submit" class="btn btn-secondary btn-submit" [disabled]="isSubmitting()">
+      @if (isSubmitting()) {
+      <span class="spinner-inline"></span> Enviando alerta de rescate...
+      } @else {
+      🚨 Enviar reporte de emergencia
+      }
+    </button>
+    <p class="submit-disclaimer">
+      Al enviar, se generará un código de seguimiento para que consultes el rescate en vivo.
+    </p>
+  </div>
+</form>
