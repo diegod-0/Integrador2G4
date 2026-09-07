@@ -1,0 +1,28 @@
+<div class="report-page">
+  <div class="container page-container">
+    <!-- HERO HEADER -->
+    <section class="report-hero">
+      <div class="hero-badge-row">
+        <span class="badge badge-danger">🚨 Emergencia Ciudadana</span>
+        <span class="badge badge-info">Respuesta en Tiempo Real</span>
+      </div>
+      <h1 class="hero-title">Reporte Ágil de Rescate Animal</h1>
+      <p class="hero-desc">
+        ¿Ves un animal herido, abandonado o en peligro inminente? Envía una alerta en menos de 30 segundos sin necesidad de registro previo.
+      </p>
+    </section>
+
+    <!-- FORMULARIO HIJO (DUMB COMPONENT) -->
+    <main class="form-wrapper">
+      <app-report-form
+        [isSubmitting]="viewState().status === 'loading'"
+        [currentCoordinates]="currentCoordinates()"
+        [gpsState]="gpsState()"
+        [availableDistricts]="availableDistricts()"
+        (onRequestGps)="onGpsRequested()"
+        (onSelectDistrict)="onDistrictSelected($event)"
+        (onSubmitReport)="onReportSubmitted($event)"
+      />
+    </main>
+  </div>
+</div>
