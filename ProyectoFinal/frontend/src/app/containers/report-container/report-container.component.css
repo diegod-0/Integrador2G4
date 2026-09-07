@@ -1,0 +1,39 @@
+.report-page {
+  padding: var(--space-xl) 0 var(--space-2xl);
+  background: radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.08) 0%, transparent 60%);
+  flex: 1 0 auto;
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.report-hero {
+  text-align: center;
+  max-width: 680px;
+  margin-bottom: var(--space-xl);
+}
+
+.hero-badge-row {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.hero-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.4rem);
+  margin-bottom: var(--space-xs);
+}
+
+.hero-desc {
+  font-size: 1.05rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.form-wrapper {
+  width: 100%;
+}

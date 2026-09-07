@@ -9,6 +9,13 @@ export interface GeoCoordinates {
   accuracyMeters?: number;
 }
 
+export type GeolocationState =
+  | { status: 'idle' }
+  | { status: 'requesting' }
+  | { status: 'acquired'; coords: GeoCoordinates }
+  | { status: 'denied'; fallbackReason: string }
+  | { status: 'error'; message: string };
+
 export type UrgencyLevel = 'BAJA' | 'MEDIA' | 'CRITICA';
 
 export type TicketEstado =
