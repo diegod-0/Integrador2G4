@@ -1,0 +1,49 @@
+<main class="container section-padding">
+  <header class="module-header">
+    <span class="badge badge-warning">HU02 · Rescue Tracker</span>
+    <h1>Seguimiento de rescate</h1>
+    <p class="subtitle">Consulta el estado del ticket generado por RescueLink.</p>
+  </header>
+
+  <section class="search-card card">
+    <app-tracking-search [initialCode]="ticketCode ?? ''" (codeSubmitted)="search($event)" />
+  </section>
+
+  @switch (viewState().status) {
+    @case ('idle') {
+      <p class="status-message">Ingresa un código para comenzar la consulta.</p>
+    }
+    @case ('loading') {
+      <p class="status-message" aria-live="polite">Consultando ticket...</p>
+    }
+    @case ('success') {
+      <section class="ticket-layout">
+        <article class="card ticket-summary">
+          <span class="badge badge-info">{{ ticket()?.estado }}</span>
+          <h2>Ticket {{ ticket()?.codigoSeguimiento }}</h2>
+          <p>{{ ticket()?.direccionReferencia }}</p>
+          @if (ticket()?.voluntarioAsignado) {
+            <p><strong>Rescatista:</strong> {{ ticket()?.voluntarioAsignado }}</p>
+          }
+          @if (ticket()?.albergueAsignado) {
+            <p><strong>Albergue:</strong> {{ ticket()?.albergueAsignado }}</p>
+          }
+        </article>
+        <article class="card">
+          <h2>Línea de tiempo</h2>
+          <app-rescue-timeline [steps]="ticket()?.historial ?? []" />
+        </article>
+      </section>
+    }
+    @case ('empty') {
+      <app-ticket-empty-state [code]="ticketCode" (retryRequested)="retry()" />
+    }
+    @case ('error') {
+      <section class="card error-state" role="alert">
+        <h2>No se pudo cargar el ticket</h2>
+        <p>{{ errorMessage() }}</p>
+        <button class="btn btn-outline" type="button" (click)="retry()">Reintentar</button>
+      </section>
+    }
+  }
+</main>
