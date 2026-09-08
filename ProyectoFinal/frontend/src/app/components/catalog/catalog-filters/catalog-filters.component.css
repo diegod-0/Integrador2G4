@@ -1,0 +1,15 @@
+.catalog-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: flex-end;
+  margin-bottom: var(--space-lg);
+}
+.catalog-filters__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding-bottom: 0.75rem;
+}
