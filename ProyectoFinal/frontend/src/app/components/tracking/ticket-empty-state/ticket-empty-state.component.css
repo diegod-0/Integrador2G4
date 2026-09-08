@@ -1,0 +1,15 @@
+.empty-state {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+  padding: var(--space-xl);
+}
+
+.empty-icon {
+  font-size: 2rem;
+}
+
+.empty-state p {
+  color: var(--text-secondary);
+}

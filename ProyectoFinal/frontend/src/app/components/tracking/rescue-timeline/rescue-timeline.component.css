@@ -1,0 +1,52 @@
+.timeline {
+  display: grid;
+  gap: var(--space-md);
+  list-style: none;
+}
+
+.timeline-step {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: var(--space-sm);
+  opacity: 0.65;
+}
+
+.timeline-step.is-completed,
+.timeline-step.is-current {
+  opacity: 1;
+}
+
+.step-marker {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  color: var(--text-muted);
+}
+
+.is-completed .step-marker {
+  border-color: var(--color-success);
+  color: var(--color-success);
+}
+
+.is-current .step-marker {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.step-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+}
+
+.step-heading h3 {
+  font-size: 1rem;
+}
+
+.step-heading time,
+.step-content p {
+  color: var(--text-secondary);
+}
