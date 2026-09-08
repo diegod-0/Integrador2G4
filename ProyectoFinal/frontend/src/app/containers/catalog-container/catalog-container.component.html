@@ -1,0 +1,61 @@
+<div class="container section-padding">
+  <div class="module-header">
+    <span class="badge badge-info">HU03 · 5 Story Points</span>
+    <h1>🐾 Catálogo Unificado de Adopción</h1>
+    <p class="subtitle">
+      Exploración de animales rescatados con ordenamiento geodésico ("Cerca de mí") y filtros
+      avanzados.
+    </p>
+  </div>
+
+  <app-catalog-filters
+    [filtro]="catalogService.filtroActual()"
+    (especieChange)="onEspecieChange($event)"
+    (tamanoChange)="onTamanoChange($event)"
+    (cercaniaToggle)="onCercaniaToggle($event)"
+  />
+
+  @if (geolocationService.state(); as geoState) {
+    @if (geoState.status === 'requesting') {
+      <p class="catalog-toast">Obteniendo tu ubicación…</p>
+    }
+    @if (geoState.status === 'denied') {
+      <p class="catalog-toast catalog-toast--warning">
+        {{ geoState.fallbackReason }} Mostrando catálogo por fecha reciente.
+      </p>
+    }
+  }
+
+  @if (catalogService.viewState(); as state) {
+    @switch (state.status) {
+      @case ('success') {
+        <div class="catalog-grid">
+          @for (animal of state.data; track animal.id) {
+            <app-animal-card [animal]="animal" />
+          }
+        </div>
+      }
+      @case ('empty') {
+        <div class="card catalog-empty">
+          <p>{{ state.message }}</p>
+          <button
+            class="btn btn-outline btn-sm"
+            (click)="onEspecieChange('TODOS'); onTamanoChange('TODOS')"
+          >
+            Limpiar filtros
+          </button>
+        </div>
+      }
+      @default {
+        <div class="card catalog-empty">
+          <p>Cargando catálogo…</p>
+        </div>
+      }
+    }
+  }
+
+  <div class="matchmaker-banner">
+    <p>¿No sabés qué mascota se adapta a tu rutina diaria?</p>
+    <a routerLink="/matchmaker" class="btn btn-primary btn-sm">Hacer Test Matchmaker ✨</a>
+  </div>
+</div>

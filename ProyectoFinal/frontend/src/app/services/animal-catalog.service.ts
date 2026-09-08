@@ -15,6 +15,7 @@ const FILTRO_INICIAL: FiltroCatalogo = {
 export class AnimalCatalogService {
   private readonly userLocation = signal<GeoCoordinates | null>(null);
   private readonly filtros = signal<FiltroCatalogo>(FILTRO_INICIAL);
+  readonly filtroActual = this.filtros.asReadonly();
 
   readonly viewState = computed<ViewState<AnimalAdopcion[]>>(() => {
     const ubicacion = this.userLocation();
