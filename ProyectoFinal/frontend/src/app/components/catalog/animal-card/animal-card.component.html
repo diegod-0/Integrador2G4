@@ -1,0 +1,26 @@
+<article class="card animal-card">
+  <div class="animal-card__image-wrapper">
+    <img
+      [src]="animal().fotoUrl"
+      [alt]="animal().nombre"
+      width="320"
+      height="240"
+      loading="lazy"
+      class="animal-card__image"
+    />
+    @if (animal().distanciaKm !== undefined) {
+      <span class="badge badge-info animal-card__distance">
+        📍 a {{ animal().distanciaKm }} km
+      </span>
+    }
+  </div>
+
+  <div class="animal-card__body">
+    <h3>{{ animal().nombre }}</h3>
+    <p class="animal-card__meta">
+      {{ animal().raza }} · {{ animal().edadAnios }}
+      {{ animal().edadAnios === 1 ? 'año' : 'años' }} · {{ animal().tamano }}
+    </p>
+    <p class="animal-card__shelter">{{ animal().albergueNombre }} · {{ animal().distrito }}</p>
+  </div>
+</article>
