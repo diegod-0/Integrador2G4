@@ -1,0 +1,51 @@
+<div class="modal-backdrop">
+  <section
+    class="matchmaker-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="matchmaker-title"
+    tabindex="-1"
+    (click)="$event.stopPropagation()"
+  >
+    <header class="modal-header">
+      <div>
+        <p class="eyebrow">Asistente de compatibilidad</p>
+        <h2 id="matchmaker-title">Encuentra tu compañero ideal</h2>
+        <p class="step-count" aria-live="polite">Paso {{ currentStep() }} de 3</p>
+      </div>
+      <button type="button" class="close-button" aria-label="Cerrar asistente" (click)="onClose.emit()">×</button>
+    </header>
+
+    @switch (currentStep()) {
+      @case (1) {
+        <fieldset class="question-group">
+          <legend>¿Cómo es tu vivienda?</legend>
+          <button type="button" (click)="selectHousing('DEPARTAMENTO_SIN_PATIO')">Departamento sin patio</button>
+          <button type="button" (click)="selectHousing('CASA_CON_PATIO_PEQUEÑO')">Casa con patio pequeño</button>
+          <button type="button" (click)="selectHousing('CASA_CAMPO_GRANDE')">Casa o campo grande</button>
+        </fieldset>
+      }
+      @case (2) {
+        <fieldset class="question-group">
+          <legend>¿Cuánto tiempo libre tienes cada día?</legend>
+          <button type="button" (click)="selectFreeTime('MENOS_DE_2H')">Menos de 2 horas</button>
+          <button type="button" (click)="selectFreeTime('ENTRE_2H_Y_4H')">Entre 2 y 4 horas</button>
+          <button type="button" (click)="selectFreeTime('MAS_DE_4H')">Más de 4 horas</button>
+        </fieldset>
+        <button type="button" class="back-button" (click)="goBack()">Atrás</button>
+      }
+      @case (3) {
+        <fieldset class="question-group">
+          <legend>¿Qué nivel de energía prefieres?</legend>
+          <button type="button" (click)="selectEnergy('TRANQUILO')">Tranquilo</button>
+          <button type="button" (click)="selectEnergy('MODERADO')">Moderado</button>
+          <button type="button" (click)="selectEnergy('MUY_ACTIVO')">Muy activo</button>
+        </fieldset>
+        <div class="modal-actions">
+          <button type="button" class="back-button" (click)="goBack()">Atrás</button>
+          <button type="button" class="btn btn-primary" (click)="complete()">Ver mis Matches</button>
+        </div>
+      }
+    }
+  </section>
+</div>

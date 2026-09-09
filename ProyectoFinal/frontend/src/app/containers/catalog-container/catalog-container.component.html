@@ -56,6 +56,20 @@
 
   <div class="matchmaker-banner">
     <p>¿No sabés qué mascota se adapta a tu rutina diaria?</p>
-    <a routerLink="/matchmaker" class="btn btn-primary btn-sm">Hacer Test Matchmaker ✨</a>
+    @if (matchmakerService.isWizardActive()) {
+      <app-reset-matchmaker-button (reset)="clearAffinity()" />
+    }
   </div>
+
+  @defer (on interaction) {
+    @if (isWizardOpen()) {
+      <app-matchmaker-modal (onComplete)="handleAffinityResults($event)" (onClose)="closeWizard()" />
+    }
+  } @placeholder {
+    <button type="button" class="btn btn-primary btn-sm" (click)="openWizard()">
+      Descubre tu Mascota Ideal
+    </button>
+  } @loading (minimum 150ms) {
+    <div class="modal-loading-skeleton" aria-live="polite">Cargando asistente de afinidad...</div>
+  }
 </div>
