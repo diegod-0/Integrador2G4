@@ -1,0 +1,11 @@
+.compatibility-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid #fbbf24;
+  border-radius: 999px;
+  background: rgba(251, 191, 36, 0.16);
+  color: #fcd34d;
+  font-size: 0.78rem;
+  font-weight: 700;
+}

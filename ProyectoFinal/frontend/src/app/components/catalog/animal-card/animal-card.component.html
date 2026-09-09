@@ -16,6 +16,9 @@
   </div>
 
   <div class="animal-card__body">
+    @if ((animal().compatibilityScore ?? 0) >= 85) {
+      <app-compatibility-badge [score]="animal().compatibilityScore ?? 0" />
+    }
     <h3>{{ animal().nombre }}</h3>
     <p class="animal-card__meta">
       {{ animal().raza }} · {{ animal().edadAnios }}

@@ -1,9 +1,11 @@
-import { Injectable, computed, signal } from '@angular/core';
+
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { AnimalAdopcion, FiltroCatalogo } from '../models/animal.model';
 import { GeoCoordinates } from '../models/emergency-report.model';
 import { ViewState } from '../models/view-state.model';
 import { calculateHaversineDistance } from '../utils/haversine';
 import { ANIMALS_MOCK } from '../mocks/animals.mock';
+import { MatchmakerService } from './matchmaker.service';
 
 const FILTRO_INICIAL: FiltroCatalogo = {
   especie: 'TODOS',
@@ -13,6 +15,7 @@ const FILTRO_INICIAL: FiltroCatalogo = {
 
 @Injectable({ providedIn: 'root' })
 export class AnimalCatalogService {
+  private readonly matchmakerService = inject(MatchmakerService);
   private readonly userLocation = signal<GeoCoordinates | null>(null);
   private readonly filtros = signal<FiltroCatalogo>(FILTRO_INICIAL);
   readonly filtroActual = this.filtros.asReadonly();
@@ -35,7 +38,12 @@ export class AnimalCatalogService {
       resultado = resultado.filter((a) => a.tamano === filtro.tamano);
     }
 
-    if (filtro.ordenarPorCercania && ubicacion) {
+    if (this.matchmakerService.isWizardActive()) {
+      const scores = this.matchmakerService.topScores();
+      resultado = resultado
+        .map((animal) => ({ ...animal, compatibilityScore: scores[animal.id] }))
+        .sort((a, b) => (b.compatibilityScore ?? 0) - (a.compatibilityScore ?? 0));
+    } else if (filtro.ordenarPorCercania && ubicacion) {
       resultado = [...resultado].sort((a, b) => (a.distanciaKm ?? 0) - (b.distanciaKm ?? 0));
     } else {
       resultado = [...resultado].sort((a, b) => a.nombre.localeCompare(b.nombre));
@@ -71,5 +79,9 @@ export class AnimalCatalogService {
       // Escenario 3 de HU03: si se desactiva o falla el permiso, vuelve a orden por defecto
       return;
     }
+  }
+
+  clearMatchmaker(): void {
+    this.matchmakerService.clearAffinity();
   }
 }

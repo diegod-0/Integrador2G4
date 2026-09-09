@@ -24,6 +24,7 @@ export interface AnimalAdopcion {
   energia: 'TRANQUILO' | 'MODERADO' | 'ACTIVO';
   espacioRequerido: 'DEPARTAMENTO' | 'CASA_PATIO';
   tiempoRequerido: 'BAJO' | 'MEDIO' | 'ALTO';
+  compatibilityScore?: number;
 }
 
 export interface MatchmakerAnswers {
