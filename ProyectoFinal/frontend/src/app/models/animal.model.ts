@@ -3,6 +3,7 @@ import { GeoCoordinates } from './emergency-report.model';
 export type AnimalEspecie = 'PERRO' | 'GATO';
 export type AnimalTamano = 'PEQUENO' | 'MEDIANO' | 'GRANDE';
 export type AnimalSexo = 'MACHO' | 'HEMBRA';
+export type OrdenCatalogo = 'RECIENTES' | 'CERCANIA';
 
 export interface AnimalAdopcion {
   id: string;
@@ -18,7 +19,7 @@ export interface AnimalAdopcion {
   coordenadas: GeoCoordinates;
   distrito: string;
   distanciaKm?: number; // Calculada dinámicamente con GPS
-  
+
   // Parámetros de compatibilidad Matchmaker
   energia: 'TRANQUILO' | 'MODERADO' | 'ACTIVO';
   espacioRequerido: 'DEPARTAMENTO' | 'CASA_PATIO';
@@ -29,4 +30,10 @@ export interface MatchmakerAnswers {
   tipoVivienda: 'DEPARTAMENTO' | 'CASA_PATIO';
   tiempoDisponible: 'BAJO' | 'MEDIO' | 'ALTO';
   nivelEnergia: 'TRANQUILO' | 'MODERADO' | 'ACTIVO';
+}
+
+export interface FiltroCatalogo {
+  especie: 'TODOS' | AnimalEspecie;
+  tamano: 'TODOS' | AnimalTamano;
+  ordenarPorCercania: boolean;
 }
