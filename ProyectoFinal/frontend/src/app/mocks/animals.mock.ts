@@ -26,7 +26,7 @@ export const ANIMALS_MOCK: AnimalAdopcion[] = [
     edadAnios: 1,
     tamano: 'PEQUENO',
     sexo: 'HEMBRA',
-    fotoUrl: 'https://placekitten.com/500/500',
+    fotoUrl: 'https://cataas.com/cat?width=500&height=500',
     descripcion: 'Tranquila y cariñosa, se adapta bien a espacios pequeños.',
     albergueNombre: 'Refugio Huellitas',
     coordenadas: { latitude: -12.1548, longitude: -76.9973 }, // Surco
@@ -60,7 +60,7 @@ export const ANIMALS_MOCK: AnimalAdopcion[] = [
     edadAnios: 4,
     tamano: 'PEQUENO',
     sexo: 'HEMBRA',
-    fotoUrl: 'https://placekitten.com/501/500',
+    fotoUrl: 'https://cataas.com/cat?width=500&height=500&type=square',
     descripcion: 'Independiente, ideal para dueños con poco tiempo libre.',
     albergueNombre: 'Refugio San Borja',
     coordenadas: { latitude: -12.1017, longitude: -76.9997 }, // San Borja
@@ -94,7 +94,7 @@ export const ANIMALS_MOCK: AnimalAdopcion[] = [
     edadAnios: 2,
     tamano: 'MEDIANO',
     sexo: 'HEMBRA',
-    fotoUrl: 'https://placekitten.com/502/500',
+    fotoUrl: 'https://cataas.com/cat?width=500&height=500&position=center',
     descripcion: 'Curiosa y activa, disfruta explorar espacios amplios.',
     albergueNombre: 'Refugio Huellitas',
     coordenadas: { latitude: -12.1548, longitude: -76.9973 }, // Surco
