@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { vi } from 'vitest';
 import { CatalogContainerComponent } from './catalog-container.component';
 import { AnimalCatalogService } from '../../services/animal-catalog.service';
@@ -13,7 +14,7 @@ describe('CatalogContainerComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [CatalogContainerComponent],
-      providers: [AnimalCatalogService, GeolocationService],
+      providers: [AnimalCatalogService, GeolocationService, provideRouter([])],
     });
 
     fixture = TestBed.createComponent(CatalogContainerComponent);
