@@ -3,6 +3,8 @@
 **/GUIA-Desarrollo/
 **/PLAN-DE-GESTION-PROJECTS-DIEGO.md
 **/personal/
+**/.atl/
+**/.codegraph/
 
 # Dependencias y compilación (previsión)
 node_modules/

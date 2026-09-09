@@ -1,0 +1,16 @@
+<form class="search-form" (submit)="submit($event)">
+  <label class="form-label" for="tracking-code">Código de seguimiento</label>
+  <div class="search-controls">
+    <input
+      id="tracking-code"
+      name="tracking-code"
+      class="form-control"
+      type="search"
+      [value]="initialCode()"
+      placeholder="Ej. TICK-1024"
+      autocomplete="off"
+      required
+    />
+    <button class="btn btn-primary" type="submit">Consultar</button>
+  </div>
+</form>

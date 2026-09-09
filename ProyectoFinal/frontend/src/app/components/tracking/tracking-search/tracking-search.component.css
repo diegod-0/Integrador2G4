@@ -1,0 +1,19 @@
+.search-form {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.search-controls {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.search-controls .form-control {
+  flex: 1;
+}
+
+@media (max-width: 520px) {
+  .search-controls {
+    flex-direction: column;
+  }
+}
