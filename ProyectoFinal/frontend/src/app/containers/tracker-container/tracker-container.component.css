@@ -1,0 +1,59 @@
+.section-padding {
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-2xl);
+}
+
+.module-header {
+  margin-bottom: var(--space-xl);
+}
+
+.subtitle,
+.status-message,
+.ticket-summary p {
+  color: var(--text-secondary);
+}
+
+.subtitle {
+  margin-top: var(--space-xs);
+  font-size: 1.1rem;
+}
+
+.search-card {
+  margin-bottom: var(--space-xl);
+}
+
+.status-message {
+  text-align: center;
+}
+
+.ticket-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.5fr);
+  gap: var(--space-lg);
+}
+
+.ticket-summary {
+  align-self: start;
+}
+
+.ticket-summary h2,
+.ticket-summary p {
+  margin-top: var(--space-sm);
+}
+
+.error-state {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-sm);
+  text-align: center;
+}
+
+.error-state p {
+  color: var(--text-secondary);
+}
+
+@media (max-width: 720px) {
+  .ticket-layout {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,14 @@
+<section class="empty-state card" aria-live="polite">
+  <div class="empty-icon" aria-hidden="true">🔎</div>
+  <h2>Ticket no encontrado</h2>
+  <p>
+    @if (code()) {
+      No encontramos el código <strong>{{ code() }}</strong>.
+    } @else {
+      Todavía no hay un ticket para mostrar.
+    }
+  </p>
+  <button class="btn btn-outline" type="button" (click)="retryRequested.emit()">
+    Buscar otro código
+  </button>
+</section>

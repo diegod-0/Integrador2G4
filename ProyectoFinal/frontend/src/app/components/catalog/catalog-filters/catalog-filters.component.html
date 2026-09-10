@@ -1,0 +1,39 @@
+<div class="card catalog-filters">
+  <div class="form-group">
+    <label class="form-label" for="filtro-especie">Especie</label>
+    <select
+      id="filtro-especie"
+      class="form-control"
+      [value]="filtro().especie"
+      (change)="onEspecieChange($event)"
+    >
+      <option value="TODOS">Todos</option>
+      <option value="PERRO">Perro</option>
+      <option value="GATO">Gato</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label" for="filtro-tamano">Tamaño</label>
+    <select
+      id="filtro-tamano"
+      class="form-control"
+      [value]="filtro().tamano"
+      (change)="onTamanoChange($event)"
+    >
+      <option value="TODOS">Todos</option>
+      <option value="PEQUENO">Pequeño</option>
+      <option value="MEDIANO">Mediano</option>
+      <option value="GRANDE">Grande</option>
+    </select>
+  </div>
+
+  <label class="catalog-filters__toggle">
+    <input
+      type="checkbox"
+      [checked]="filtro().ordenarPorCercania"
+      (change)="onCercaniaToggle($event)"
+    />
+    📍 Cerca de mí
+  </label>
+</div>

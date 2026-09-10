@@ -1,0 +1,21 @@
+<ol class="timeline" role="list">
+  @for (step of steps(); track step.estado) {
+    <li
+      class="timeline-step"
+      [class.is-completed]="step.completado"
+      [class.is-current]="step.actual"
+      [attr.aria-current]="step.actual ? 'step' : null"
+    >
+      <div class="step-marker" aria-hidden="true">{{ step.completado ? '✓' : '•' }}</div>
+      <div class="step-content">
+        <div class="step-heading">
+          <h3>{{ step.titulo }}</h3>
+          @if (step.fechaHora) {
+            <time>{{ step.fechaHora }}</time>
+          }
+        </div>
+        <p>{{ step.descripcion }}</p>
+      </div>
+    </li>
+  }
+</ol>
