@@ -11,11 +11,11 @@ describe('CatalogContainerComponent', () => {
   let catalogService: AnimalCatalogService;
   let geoService: GeolocationService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [CatalogContainerComponent],
       providers: [AnimalCatalogService, GeolocationService, provideRouter([])],
-    });
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CatalogContainerComponent);
     component = fixture.componentInstance;
@@ -23,6 +23,7 @@ describe('CatalogContainerComponent', () => {
     geoService = TestBed.inject(GeolocationService);
     fixture.detectChanges();
   });
+
 
   afterEach(() => {
     vi.restoreAllMocks();
