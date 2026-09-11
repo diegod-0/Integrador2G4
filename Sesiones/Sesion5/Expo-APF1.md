@@ -191,8 +191,8 @@ gantt
 
     section Unidad 1 (APF1)
     Alineación, AS-IS, MVP y Scrum             :milestone, m1, 2026-08-17, 0d
-    Prototipado Figma y Guerrilla Testing      :done, act1, 2026-08-24, 7d
-    Primer Incremento Front-End & WPO          :active, act2, 2026-08-31, 10d
+    Prototipado Figma                          :done, act1, 2026-08-24, 7d
+    Primer Incremento Front-End                :active, act2, 2026-08-31, 10d
     HITO 1 - Entrega y Sustentación APF1 (20%) :crit, milestone, m2, 2026-09-11, 0d
 
     section Unidad 2 (APF2)
