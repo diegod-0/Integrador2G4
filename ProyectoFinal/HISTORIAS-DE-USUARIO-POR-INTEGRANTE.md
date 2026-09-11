@@ -1,5 +1,5 @@
 # Catálogo Maestro de Historias de Usuario por Integrante (Semestre 2026-2)
-**Proyecto:** RescueLink — Plataforma Web de Rescate, Refugio y Adopción Animal  
+**Proyecto:** RescueLink — Sistema de información web para la coordinación, seguimiento espacial y gestión de adopciones de animales en riesgo  
 **Marco de Trabajo:** Scrum Ágil / Gestión Integral en GitHub Projects  
 **Cobertura Temporal:** 18 Semanas · 4 Hitos Evaluativos (APF1, APF2, APF3, PROY)  
 **Curso:** Integrador II: Software (100000S12F) — Ciclo 2026-2 Agosto  

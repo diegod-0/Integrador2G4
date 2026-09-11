@@ -1,5 +1,5 @@
 # 00. Visión General del Proyecto
-**RescueLink — Plataforma Web de Rescate, Refugio y Adopción Animal**
+**RescueLink — Sistema de información web para la coordinación, seguimiento espacial y gestión de adopciones de animales en riesgo**
 **Curso Integrador II: Software (100000S12F) — Ciclo 2026-2 Agosto**
 
 ---

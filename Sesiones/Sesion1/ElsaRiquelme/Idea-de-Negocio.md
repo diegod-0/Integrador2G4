@@ -1,13 +1,13 @@
 # Sesión 1: Idea de Negocio del Proyecto
 **Curso Integrador II: Software (100000S12F) — Ciclo 2026-2**  
-**Proyecto:** RescueLink — Plataforma Web de Rescate y Adopción Animal  
+**Proyecto:** RescueLink — Sistema de información web para la coordinación, seguimiento espacial y gestión de adopciones de animales en riesgo  
 **Estudiante:** Elsa Riquelme  
 
 ---
 
 ## 1. Nombre y Definición de la Idea
 * **Nombre Comercial:** RescueLink
-* **Definición Técnica:** Sistema web georreferenciado para la gestión de reportes de emergencia de animales en la vía pública, coordinación con albergues cercanos y adopción responsable.
+* **Definición Técnica:** Sistema de información web para la coordinación, seguimiento espacial y gestión de adopciones de animales en riesgo.
 
 ---
 

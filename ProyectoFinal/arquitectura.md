@@ -1,5 +1,5 @@
 # Arquitectura del Sistema
-**RescueLink — Sistema Web de Rescate, Refugio y Adopción de Animales**
+**RescueLink — Sistema de información web para la coordinación, seguimiento espacial y gestión de adopciones de animales en riesgo**
 
 ---
 

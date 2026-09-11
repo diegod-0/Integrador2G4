@@ -1,6 +1,6 @@
 # Actividad de Laboratorio 2: Arquitectura, Repositorio y Experiencia de Usuario (UX)
 **Curso Integrador II: Software (100000S12F) — Ciclo 2026-2**  
-**Proyecto:** RescueLink — Sistema Web de Rescate y Adopción Animal  
+**Proyecto:** RescueLink — Sistema de información web para la coordinación, seguimiento espacial y gestión de adopciones de animales en riesgo  
 **Estudiante:** Elsa Riquelme  
 
 ---
