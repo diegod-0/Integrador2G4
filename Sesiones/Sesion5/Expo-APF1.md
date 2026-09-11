@@ -11,7 +11,6 @@
 ### EXPO: DIEGO CLAROS
 
 ## Portada institucional y organización del equipo
-**Capítulo 1: Alineación y organización del equipo (Team Charter)**
 
 ### 1.1 Identificación del proyecto
 * **Nombre oficial:** *RescueLink — Sistema de información web para la coordinación, seguimiento espacial y gestión de adopciones de animales en riesgo*.
@@ -23,7 +22,7 @@ Distribución simétrica de responsabilidades técnicas y operativas con trazabi
 
 | Integrante | Rol Scrum Principal | Módulo Funcional Asignado | Historia Sprint 1 (APF1) | Responsabilidad Técnica Clave |
 |---|---|---|:---:|---|
-| **Diego Claros** | **Scrum Master & Lead Architect** | Módulo 1: Reporte Ciudadano | **HU01** (8 SP) | Arquitectura base Angular, ADRs y captura de coordenadas GPS. |
+| **Diego Claros** | **Scrum Master & Lead Architect** | Módulo 1: Reporte Ciudadano | **HU01** (8 SP) | Arquitectura base Angular, y captura de coordenadas GPS. |
 | **Pedro Cueto** | **Product Owner Simulado** | Módulo 2: Rescue Tracker | **HU02** (5 SP) | Backlog maestro, requerimientos, cronograma Gantt. |
 | **Anghelo Mendoza** | **Business Analyst & Developer** | Módulo 3: Catálogo Espacial | **HU03** (5 SP) | Flujo UX, modelo de datos sintéticos. |
 | **Elsa Riquelme** | **QA Lead & UX Developer** | Módulo 4: Matchmaker & Calidad | **HU04** (5 SP) | Prototipado Figma, matriz PMBOK. |
