@@ -1,4 +1,4 @@
-# RescueLink — Plataforma Web de Rescate, Refugio y Adopción Animal
+# RescueLink — Sistema de información web para la coordinación, seguimiento espacial y gestión de adopciones de animales en riesgo
 
 [![Angular](https://img.shields.io/badge/Frontend-Angular_19+_Standalone-DD0031?logo=angular&logoColor=white)](https://angular.dev/)
 [![TypeScript](https://img.shields.io/badge/Language-TypeScript_5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
