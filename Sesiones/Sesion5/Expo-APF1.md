@@ -8,14 +8,15 @@
 [![Figma](https://img.shields.io/badge/Prototipo-Figma_Interactivo-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/make/1zxQe5KPlpvTQizYrOPFLe/RescueLink-accessible-pet-adoption-site?t=TP9UcGP7XE97F57B-20&fullscreen=1)
 
 ---
+### EXPO: DIEGO CLAROS
 
 ## Portada institucional y organización del equipo
 **Capítulo 1: Alineación y organización del equipo (Team Charter)**
 
 ### 1.1 Identificación del proyecto
 * **Nombre oficial:** *RescueLink — Sistema de información web para la coordinación, seguimiento espacial y gestión de adopciones de animales en riesgo*.
-* **Institución:** Universidad Tecnológica del Perú (UTP) · Facultad de Ingeniería de Sistemas.
-* **Curso:** Curso Integrador II: Software (100000S12F) · Semestre Académico 2026-2.
+* **Institución:** Universidad Tecnológica del Perú (UTP)
+* **Curso:** Curso Integrador II: Software
 
 ### 1.2 Estructura del equipo de ingeniería y roles scrum
 Distribución simétrica de responsabilidades técnicas y operativas con trazabilidad total en GitHub:
@@ -23,13 +24,13 @@ Distribución simétrica de responsabilidades técnicas y operativas con trazabi
 | Integrante | Rol Scrum Principal | Módulo Funcional Asignado | Historia Sprint 1 (APF1) | Responsabilidad Técnica Clave |
 |---|---|---|:---:|---|
 | **Diego Claros** | **Scrum Master & Lead Architect** | Módulo 1: Reporte Ciudadano | **HU01** (8 SP) | Arquitectura base Angular, ADRs y captura de coordenadas GPS. |
-| **Pedro Cueto** | **Product Owner Simulado** | Módulo 2: Rescue Tracker | **HU02** (5 SP) | Backlog maestro, requerimientos BDD, cronograma Gantt y DoD. |
-| **Anghelo Mendoza** | **Business Analyst & Developer** | Módulo 3: Catálogo Espacial | **HU03** (5 SP) | Flujo UX, modelo de datos sintéticos y algoritmo Haversine. |
-| **Elsa Riquelme** | **QA Lead & UX Developer** | Módulo 4: Matchmaker & Calidad | **HU04** (5 SP) | Prototipado Figma, WCAG 2.1 AA, matriz PMBOK y auditoría WPO. |
+| **Pedro Cueto** | **Product Owner Simulado** | Módulo 2: Rescue Tracker | **HU02** (5 SP) | Backlog maestro, requerimientos, cronograma Gantt. |
+| **Anghelo Mendoza** | **Business Analyst & Developer** | Módulo 3: Catálogo Espacial | **HU03** (5 SP) | Flujo UX, modelo de datos sintéticos. |
+| **Elsa Riquelme** | **QA Lead & UX Developer** | Módulo 4: Matchmaker & Calidad | **HU04** (5 SP) | Prototipado Figma, matriz PMBOK. |
 
 ### 1.3 Gobernanza del Equipo (Team Charter)
-* **Cadencia Ágil:** Sprints bisemanales con sincronizaciones asíncronas diarias (*Daily Scrum*) en Discord y control de issues en GitHub Projects.
-* **Disciplina de repositorio:** Modelo Git Flow con ramas protegidas, prohibición de commits directos a `desarrollo-frontend` y revisión por pares obligatoria.
+* **Seguimiento Ágil:** Sprints con sincronizaciones diarias (*Daily Scrum*) y control de issues en GitHub Projects.
+* **Disciplina de repositorio:** Modelo Git Flow con ramas protegidas, prohibición de commits directos a `main` y `desarrollo-frontend`.
 
 ---
 
@@ -104,12 +105,12 @@ sequenceDiagram
 ### 3.1 Definición de la oportunidad y Product Goal
 * **Enunciado de la oportunidad:** Reducir el tiempo de reporte a menos de 30 segundos, eliminar el despacho a ciegas de rescatistas mediante georreferenciación y transparentar el rescate y adopción de animales vulnerables.
 * **Product Goal (Hito APF1):**  
-  > *"Construir y desplegar un sistema web accesible, responsivo y de alto rendimiento que capture reportes georreferenciados de animales en riesgo en menos de 30 segundos sin fricción de registro, proporcione seguimiento reactivo en vivo y permita explorar mascotas en adopción ordenadas por cercanía física."*
+  > *"Construir un sistema web accesible, responsivo y de alto rendimiento que capture reportes georreferenciados de animales en riesgo en menos de 30 segundos sin fricción de registro, proporcione seguimiento reactivo en vivo y permita explorar mascotas en adopción ordenadas por cercanía física."*
 
 ### 3.2 Matriz de alcance: In-Scope vs. Out-of-Scope (MVP APF1 vs. Hitos posteriores)
 
 | Capacidades Incluidas en el Alcance (In-Scope - APF1) | Capacidades Excluidas de esta Versión (Out-of-Scope) |
-|---|---|:---:|
+|---|---|
 | Formulario de reporte ágil ciudadano con captura automática de GPS y vista previa de foto. | Pasarela de pagos bancarios reales para donaciones monetarias. |
 | Línea de tiempo reactiva con visualización de estados en tiempo real. | Aplicación móvil nativa en tiendas Google Play / App Store (foco en Web Responsive). |
 | Catálogo de adopción filtrable con ordenamiento esférico por proximidad (*"Cerca de mí"*). | Algoritmo de ruteo vehicular multi-parada en tiempo real para patrullas. |
@@ -123,7 +124,6 @@ sequenceDiagram
 ---
 
 ## Catálogo Formal de Requerimientos (RF, RNF y Reglas de Negocio)
-**Capítulo 4: Elicitación de Requerimientos e Historias de Usuario**
 
 ### 4.1 Requerimientos Funcionales (RF)
 * **RF01 (Reporte Ágil de Emergencia):** El sistema debe permitir al usuario enviar un reporte de emergencia ingresando nombre, WhatsApp, fotografía del animal y captura de coordenadas GPS del dispositivo.
@@ -150,6 +150,7 @@ sequenceDiagram
 * **RN06 (Privacidad del Ciudadano):** Los datos personales del reportante solo son visibles para el personal asignado al auxilio y se ocultan de las vistas públicas conforme a la Ley 29733.
 
 ---
+### EXPO: ELSA RIQUELME
 
 ## Product Backlog Maestro (16 Historias de Usuario) y Planificación Sprint 1
 
@@ -176,7 +177,7 @@ Distribución equitativa: exactamente **4 Historias de Usuario por integrante** 
 | **HU16** | Portal Público de Verificación Criptográfica QR | Diego Claros | PROY (Sprint 4) | 2 SP | Could Have | `feat/HU-16-verificacion-qr` |
 
 ### 5.2 Planificación del Sprint 1 (APF1)
-* **Velocidad Comprometida del Sprint 1:** **21 Story Points**.
+* **Velocidad Comprometida del Sprint 1:** **23 Story Points**.
 * **Objetivo del Sprint 1:** Entregar el primer incremento funcional del cliente web, permitiendo reportar emergencias con geolocalización, rastrear el auxilio y explorar adopciones por cercanía.
 
 ---
@@ -261,7 +262,9 @@ Evaluación con usuario representativo externo ejecutando 3 tareas críticas en 
 
 ---
 
-## Flujo de usuario (user flow) y algoritmo geodésico espacial
+### EXPO: ANGHELO MENDOZA
+
+## Flujo de usuario (user flow)
 
 ### 8.1 Diagrama del flujo de usuario (user flow)
 ```mermaid
@@ -306,6 +309,8 @@ flowchart TD
 
 ---
 
+### EXPO: PEDRO CUETO
+
 ## Control de ingeniería en GitHub, Git Flow y Criterios DoD / DoR
 
 ### 10.1 Estructura del repositorio GitHub (`Integrador2G4`)
@@ -341,6 +346,8 @@ flowchart TD
 * **Normativos:** Incumplimiento de la Ley 29733 de Protección de Datos Personales.
 
 ---
+
+### EXPO: DIEGO CLAROS
 
 ## Métricas de Negocio (KPIs), Métricas Técnicas (SLIs) y Acuerdos de Nivel de Servicio (SLA)
 
