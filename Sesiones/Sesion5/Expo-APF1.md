@@ -180,6 +180,37 @@ Distribución equitativa: exactamente **4 Historias de Usuario por integrante** 
 * **Velocidad Comprometida del Sprint 1:** **23 Story Points**.
 * **Objetivo del Sprint 1:** Entregar el primer incremento funcional del cliente web, permitiendo reportar emergencias con geolocalización, rastrear el auxilio y explorar adopciones por cercanía.
 
+### 5.3 Cronograma de hitos estratégicos (Diagrama de Gantt)
+Planificación temporal semestral articulada en 4 hitos evaluativos (Semanas 1 a 18):
+
+```mermaid
+gantt
+    title Cronograma de Hitos Estratégicos RescueLink (Semanas 1 a 18)
+    dateFormat  YYYY-MM-DD
+    axisFormat  Sem %W
+
+    section Unidad 1 (APF1)
+    Alineación, AS-IS, MVP y Scrum           :milestone, m1, 2026-08-17, 0d
+    Prototipado Figma y Guerrilla Testing     :done, act1, 2026-08-24, 7d
+    Primer Incremento Front-End & WPO         :active, act2, 2026-08-31, 10d
+    HITO 1: Entrega y Sustentación APF1 (20%) :crit, milestone, m2, 2026-09-11, 0d
+
+    section Unidad 2 (APF2)
+    Modelo Relacional, PostGIS y Flyway       :act3, 2026-09-14, 14d
+    API Spring Boot 3.4 y Seguridad JWT       :act4, 2026-09-28, 14d
+    HITO 2: Despliegue v1 en PaaS (APF2 - 20%):crit, milestone, m3, 2026-10-12, 0d
+
+    section Unidad 3 (APF3)
+    Integración Externa Resend / Mapas        :act5, 2026-10-15, 14d
+    Pruebas Usabilidad SUS y Despliegue v2    :act6, 2026-10-29, 14d
+    HITO 3: Calidad e Interacción (APF3 - 20%):crit, milestone, m4, 2026-11-12, 0d
+
+    section Unidad 4 (PROY)
+    Pruebas de Carga JMeter y Tuning DB       :act7, 2026-11-16, 10d
+    Monitoreo Actuator y Simulacro RTO/RPO    :act8, 2026-11-26, 10d
+    HITO 4: Sustentación Proyecto Final (40%) :crit, milestone, m5, 2026-12-07, 0d
+```
+
 ---
 
 ## Especificaciones e Historias de usuario prioritarias
