@@ -34,7 +34,6 @@ Distribución simétrica de responsabilidades técnicas y operativas con trazabi
 ---
 
 ## Diagnóstico empresarial (AS-IS), documentación de campo y causa raíz
-**Capítulo 2: Diagnóstico de la realidad empresarial & Capítulo 3: Definición de la oportunidad**
 
 ### 2.1 Metodología de levantamiento de información y documentación de campo
 La definición del problema se sustentó en un proceso riguroso de investigación documental y de campo:
@@ -117,7 +116,7 @@ sequenceDiagram
 | Directorio visual de albergues con indicador de capacidad disponible y datos de contacto. | Gestión de historias clínicas complejas con firma criptográfica PKI. |
 | Manejo determinista de 5 estados UI (`idle`, `loading`, `success`, `empty`, `error`) con datos sintéticos locales. | Conexión a base de datos persistente concurrente (Spring Boot + PostgreSQL/PostGIS). |
 
-### 3.3 Supuestos y restricciones del proyecto
+### 3.3 Supuesto del proyecto
 * **Supuesto Clave:** El 90% de los ciudadanos que reportan en la calle utilizan navegadores móviles con sensor GPS operativo.
 
 ---
