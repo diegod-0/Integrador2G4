@@ -1,0 +1,32 @@
+services:
+  # =============================================================================
+  # BASE DE DATOS PRIMARIA: PostgreSQL 17 + PostGIS 3.5
+  # =============================================================================
+  postgres-primary:
+    image: postgis/postgis:17-3.5-alpine
+    container_name: rescuelink-postgres-primary
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-rescuelink_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - pg_primary_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d rescuelink_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - rescuelink-network
+
+networks:
+  rescuelink-network:
+    driver: bridge
+
+volumes:
+  pg_primary_data:
+    driver: local

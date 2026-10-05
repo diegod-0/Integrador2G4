@@ -14,5 +14,9 @@ target/
 .idea/
 .vscode/
 *.log
+*.env
+.env
+.env.*
+!.env.example
 .DS_Store
 Thumbs.db
