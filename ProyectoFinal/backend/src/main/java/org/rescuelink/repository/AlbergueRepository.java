@@ -73,4 +73,20 @@ public interface AlbergueRepository extends JpaRepository<Albergue, UUID> {
         WHERE a.id = :id AND a.deleted_at IS NULL
         """, nativeQuery = true)
     Optional<Object[]> findDirectorioPorId(@Param("id") UUID id);
+
+    /**
+     * Consulta la ocupación actual de un albergue contra su capacidad máxima
+     * utilizando la vista v_albergues_capacidad_disponible (HU10).
+     * La vista solo incluye albergues activos, por lo que un albergue dado de
+     * baja o inexistente no produce fila.
+     * Se retorna List (no Optional) porque el mapeo de filas nativas de Spring
+     * Data JPA con varias columnas solo es fiable con List<Object[]>.
+     */
+    @Query(value = """
+        SELECT v.capacidad_max,
+               COALESCE(v.animales_alojados, 0) AS animales_alojados
+        FROM v_albergues_capacidad_disponible v
+        WHERE v.albergue_id = :id
+        """, nativeQuery = true)
+    List<Object[]> findCapacidadDisponible(@Param("id") UUID id);
 }
