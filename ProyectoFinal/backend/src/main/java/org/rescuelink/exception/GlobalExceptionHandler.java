@@ -4,12 +4,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.rescuelink.dto.ProblemDetailsResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 
@@ -44,6 +47,66 @@ public class GlobalExceptionHandler {
                 invalidParams
         );
 
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ProblemDetailsResponse> handleTypeMismatch(
+            MethodArgumentTypeMismatchException ex,
+            HttpServletRequest request
+    ) {
+        ProblemDetailsResponse problem = ProblemDetailsResponse.of(
+                "https://rescuelink.org/errors/invalid-parameter",
+                "Parámetro Inválido",
+                HttpStatus.BAD_REQUEST.value(),
+                String.format("El parámetro '%s' tiene un formato inválido.", ex.getName()),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ProblemDetailsResponse> handleBusiness(
+            BusinessException ex,
+            HttpServletRequest request
+    ) {
+        ProblemDetailsResponse problem = ProblemDetailsResponse.of(
+                "https://rescuelink.org/errors/business-rule",
+                "Regla de Negocio Incumplida",
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ProblemDetailsResponse> handleMissingParam(
+            MissingServletRequestParameterException ex,
+            HttpServletRequest request
+    ) {
+        ProblemDetailsResponse problem = ProblemDetailsResponse.of(
+                "https://rescuelink.org/errors/missing-parameter",
+                "Parámetro Requerido Ausente",
+                HttpStatus.BAD_REQUEST.value(),
+                String.format("El parámetro obligatorio '%s' no fue proporcionado.", ex.getParameterName()),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ProblemDetailsResponse> handleUnreadableBody(
+            HttpMessageNotReadableException ex,
+            HttpServletRequest request
+    ) {
+        ProblemDetailsResponse problem = ProblemDetailsResponse.of(
+                "https://rescuelink.org/errors/invalid-body",
+                "Cuerpo de Solicitud Inválido",
+                HttpStatus.BAD_REQUEST.value(),
+                "El cuerpo de la solicitud es inválido o contiene valores no reconocidos.",
+                request.getRequestURI()
+        );
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problem);
     }
 
