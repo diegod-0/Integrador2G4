@@ -17,20 +17,29 @@ public interface TicketRescateRepository extends JpaRepository<TicketRescate, UU
     Optional<TicketRescate> findByCodigoTracking(String codigoTracking);
 
     /**
-     * Detección espacio-temporal de emergencias duplicadas.
-     * Busca tickets activos en un radio geodésico (ej. 50 metros) reportados hace menos de N horas.
+     * Detección espacio-temporal de emergencias duplicadas en metros geodésicos
+     * reales.
+     * Busca tickets activos en un radio en metros reportados hace menos de N horas,
+     * ordenados ascendentemente por proximidad para obtener el más cercano primero.
      */
     @Query(value = """
-        SELECT t.* FROM tickets_rescate t 
-        WHERE t.deleted_at IS NULL 
-          AND t.estado IN ('PENDIENTE', 'ASIGNADO', 'EN_CAMINO') 
-          AND t.created_at >= :tiempoLimite 
-          AND ST_DWithin(t.ubicacion, ST_SetSRID(ST_MakePoint(:lng, :lat), 4326), :radioMetros)
-        """, nativeQuery = true)
+            SELECT t.* FROM tickets_rescate t
+            WHERE t.deleted_at IS NULL
+              AND t.estado IN ('PENDIENTE', 'ASIGNADO', 'EN_CAMINO')
+              AND t.created_at >= :tiempoLimite
+              AND ST_DWithin(
+                    t.ubicacion::geography,
+                    ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography,
+                    :radioMetros
+              )
+            ORDER BY ST_Distance(
+                    t.ubicacion::geography,
+                    ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography
+            ) ASC
+            """, nativeQuery = true)
     List<TicketRescate> findDuplicadosCercanos(
             @Param("lng") double longitud,
             @Param("lat") double latitud,
             @Param("radioMetros") double radioMetros,
-            @Param("tiempoLimite") Instant tiempoLimite
-    );
+            @Param("tiempoLimite") Instant tiempoLimite);
 }
