@@ -1,3 +1,4 @@
+
 package org.rescuelink.repository;
 
 import org.rescuelink.model.TicketRescate;
@@ -17,16 +18,25 @@ public interface TicketRescateRepository extends JpaRepository<TicketRescate, UU
     Optional<TicketRescate> findByCodigoTracking(String codigoTracking);
 
     /**
-     * Detección espacio-temporal de emergencias duplicadas.
-     * Busca tickets activos en un radio geodésico (ej. 50 metros) reportados hace menos de N horas.
+     * HU05: detecta emergencias duplicadas por proximidad geodésica en metros.
+     * Busca tickets activos reportados dentro del intervalo temporal indicado,
+     * ordenados por distancia ascendente.
      */
     @Query(value = """
-        SELECT t.* FROM tickets_rescate t 
-        WHERE t.deleted_at IS NULL 
-          AND t.estado IN ('PENDIENTE', 'ASIGNADO', 'EN_CAMINO') 
-          AND t.created_at >= :tiempoLimite 
-          AND ST_DWithin(t.ubicacion, ST_SetSRID(ST_MakePoint(:lng, :lat), 4326), :radioMetros)
-        """, nativeQuery = true)
+            SELECT t.* FROM tickets_rescate t
+            WHERE t.deleted_at IS NULL
+              AND t.estado IN ('PENDIENTE', 'ASIGNADO', 'EN_CAMINO')
+              AND t.created_at >= :tiempoLimite
+              AND ST_DWithin(
+                    t.ubicacion::geography,
+                    ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography,
+                    :radioMetros
+              )
+            ORDER BY ST_Distance(
+                    t.ubicacion::geography,
+                    ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography
+            ) ASC
+            """, nativeQuery = true)
     List<TicketRescate> findDuplicadosCercanos(
             @Param("lng") double longitud,
             @Param("lat") double latitud,
@@ -35,11 +45,26 @@ public interface TicketRescateRepository extends JpaRepository<TicketRescate, UU
     );
 
     /**
-     * Bandeja operativa de rescates (HU10) por proximidad al albergue.
-     * Devuelve los tickets PENDIENTE y ASIGNADO dentro del radio geodésico y los
-     * ordena de menor a mayor distancia. La distancia se calcula con el cast
-     * ::geography para que el radio y el resultado se expresen en METROS reales
-     * (sin el cast, PostGIS interpretaría el radio en GRADOS).
+     * HU05: calcula la distancia geodésica en metros entre un ticket
+     * y las coordenadas indicadas.
+     */
+    @Query(value = """
+            SELECT ST_Distance(
+                     t.ubicacion::geography,
+                     ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography)
+            FROM tickets_rescate t
+            WHERE t.id = :id
+            """, nativeQuery = true)
+    Double calcularDistanciaMetros(
+            @Param("id") UUID id,
+            @Param("lng") double longitud,
+            @Param("lat") double latitud
+    );
+
+    /**
+     * HU10: obtiene la bandeja operativa de rescates cercanos a un albergue.
+     * Devuelve tickets pendientes o asignados, ordenados por distancia
+     * geodésica en metros y luego por fecha de creación.
      */
     @Query(value = """
         SELECT t.id, t.codigo_tracking, t.descripcion, t.gravedad, t.estado,
@@ -55,7 +80,7 @@ public interface TicketRescateRepository extends JpaRepository<TicketRescate, UU
                t.created_at
         FROM tickets_rescate t
         LEFT JOIN albergues a ON t.albergue_id = a.id AND a.deleted_at IS NULL
-        LEFT JOIN usuarios  u ON t.voluntario_id = u.id AND u.deleted_at IS NULL
+        LEFT JOIN usuarios u ON t.voluntario_id = u.id AND u.deleted_at IS NULL
         WHERE t.deleted_at IS NULL
           AND t.estado IN ('PENDIENTE', 'ASIGNADO')
           AND ST_DWithin(
