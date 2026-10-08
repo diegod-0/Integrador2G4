@@ -42,4 +42,16 @@ public interface TicketRescateRepository extends JpaRepository<TicketRescate, UU
             @Param("lat") double latitud,
             @Param("radioMetros") double radioMetros,
             @Param("tiempoLimite") Instant tiempoLimite);
+
+    @Query(value = """
+            SELECT ST_Distance(
+                     t.ubicacion::geography,
+                     ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography)
+            FROM tickets_rescate t
+            WHERE t.id = :id
+            """, nativeQuery = true)
+    Double calcularDistanciaMetros(
+            @Param("id") UUID id,
+            @Param("lng") double longitud,
+            @Param("lat") double latitud);
 }
