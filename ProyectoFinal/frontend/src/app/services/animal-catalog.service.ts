@@ -60,7 +60,7 @@ export class AnimalCatalogService {
   private sincronizarConBackend(): void {
     if (!this.http) return;
 
-    this.http.get<{ data?: any[] }>('http://localhost:8080/api/animales/adopcion').subscribe({
+    this.http.get<{ data?: any[] }>('/api/animales/adopcion').subscribe({
       next: (res) => {
         const items = res?.data ?? (Array.isArray(res) ? res : null);
         if (items && items.length > 0) {
