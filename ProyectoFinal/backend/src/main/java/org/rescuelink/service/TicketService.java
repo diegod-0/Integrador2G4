@@ -65,7 +65,7 @@ public class TicketService {
                 .whatsappReportante(request.whatsappReportante())
                 .descripcion(request.descripcion())
                 .gravedad(request.gravedad())
-                .estado(albergueAsignado != null ? EstadoTicket.ASIGNADO : EstadoTicket.PENDIENTE)
+                .estado(EstadoTicket.PENDIENTE)
                 .ubicacion(ubicacion)
                 .fotoUrl(request.fotoUrl())
                 .albergue(albergueAsignado)

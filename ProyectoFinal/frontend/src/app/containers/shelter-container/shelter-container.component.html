@@ -1,0 +1,118 @@
+<div class="shelter-page section-padding">
+  <div class="container">
+    <!-- HERO HEADER -->
+    <header class="module-header">
+      <div class="badge-row">
+        <span class="badge badge-success">Red de albergues</span>
+        <span class="badge badge-success">
+          HU07 · PostGIS
+        </span>
+      </div>
+      <h1 class="hero-title">Directorio de albergues y refugios</h1>
+      <p class="subtitle">
+        Consulta la capacidad y ocupación en tiempo real de los refugios aliados y apoya su labor mediante donaciones
+        directas.
+      </p>
+    </header>
+
+    <!-- ESTADOS DE VISTA (SIGNALS) -->
+    @if (isLoading()) {
+    <div class="card status-card">
+      <p>Cargando albergues desde PostgreSQL en Docker...</p>
+    </div>
+    }
+
+    @if (albergues().length > 0) {
+    <div class="shelter-grid">
+      @for (albergue of albergues(); track albergue.id) {
+      <article class="card shelter-card">
+        <div class="shelter-card-header">
+          <h2 class="shelter-name">{{ albergue.nombre }}</h2>
+          <span class="occupancy-badge" [class.badge-danger]="albergue.porcentajeOcupacion >= 90">
+            {{ albergue.porcentajeOcupacion }}% Ocupado
+          </span>
+        </div>
+
+        <p class="shelter-address">📍 {{ albergue.direccion }}</p>
+        <p class="shelter-phone">📞 {{ albergue.telefono }}</p>
+
+        <!-- Barra de capacidad dinámica (HU07) -->
+        <div class="capacity-section">
+          <div class="capacity-labels">
+            <span>Capacidad: <strong>{{ albergue.ocupacionActual }} / {{ albergue.capacidadMax }}</strong></span>
+            <span>Cupos libres: {{ albergue.capacidadMax - albergue.ocupacionActual }}</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" [style.width.%]="albergue.porcentajeOcupacion"
+              [style.background]="albergue.porcentajeOcupacion >= 90 ? 'var(--color-danger, #ef4444)' : 'var(--color-primary, #0284c7)'">
+            </div>
+          </div>
+        </div>
+
+        <div class="card-footer">
+          <button class="btn btn-primary btn-block" (click)="abrirDonacion(albergue)">
+            💝 Donar a este Albergue
+          </button>
+        </div>
+      </article>
+      }
+    </div>
+    }
+
+    <!-- MODAL / FORMULARIO INTERACTIVO DE DONACIÓN -->
+    @if (selectedAlbergue(); as albergue) {
+    <div class="modal-backdrop" (click)="cerrarDonacion()">
+      <div class="card modal-card" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h3>Registrar donación para: <em>{{ albergue.nombre }}</em></h3>
+          <button class="btn-close" (click)="cerrarDonacion()">✕</button>
+        </div>
+
+        @if (donationSuccess()) {
+        <div class="alert alert-success" style="margin: 1rem 0;">
+          {{ donationSuccess() }}
+        </div>
+        }
+
+        @if (donationError()) {
+        <div class="alert alert-danger" style="margin: 1rem 0;">
+          {{ donationError() }}
+        </div>
+        }
+
+        <form (ngSubmit)="enviarDonacion()" class="donation-form">
+          <div class="form-group">
+            <label for="tipoDonacion" class="form-label">Tipo de donación:</label>
+            <select id="tipoDonacion" [(ngModel)]="donationTipo" name="donationTipo" class="form-control">
+              <option value="MONETARIA">💰 Aporte monetario (S/.)</option>
+              <option value="ALIMENTO">🍖 Alimento balanceado</option>
+              <option value="MEDICINAS">💊 Medicamentos / Triaje</option>
+              <option value="ACCESORIOS">📦 Mantas, camas o accesorios</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="montoDonacion" class="form-label">Monto estimado o cantidad (S/.):</label>
+            <input id="montoDonacion" type="number" min="1" [(ngModel)]="donationMonto" name="donationMonto"
+              class="form-control" placeholder="Ej. 50" required />
+          </div>
+
+          <div class="form-group">
+            <label for="descDonacion" class="form-label">Descripción o detalle del aporte:</label>
+            <textarea id="descDonacion" [(ngModel)]="donationDescripcion" name="donationDescripcion" rows="2"
+              class="form-control" placeholder="Ej. Alimento balanceado, medicinas o insumos veterinarios..." required>
+              </textarea>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" (click)="cerrarDonacion()">Cancelar</button>
+            <button type="submit" class="btn btn-success" [disabled]="donationLoading()">
+              {{ donationLoading() ? 'Enviando a PostgreSQL...' : 'Confirmar Donación' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    }
+  </div>
+</div>

@@ -33,6 +33,7 @@
 
   /* Typography Colors */
   --text-main: #f8fafc;
+  --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-muted: #64748b;
   --text-inverse: #0f172a;
@@ -246,4 +247,37 @@ a:hover {
 
 .form-control::placeholder {
   color: var(--text-muted);
+}
+
+/* Alerts & Status Banners */
+.alert {
+  padding: 0.85rem 1.15rem;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border: 1px solid transparent;
+}
+
+.alert-success {
+  background-color: var(--color-success-bg);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+
+.alert-warning {
+  background-color: var(--color-warning-bg);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+}
+
+.alert-danger {
+  background-color: var(--color-danger-bg);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #f87171;
+}
+
+.alert-info {
+  background-color: var(--color-info-bg);
+  border-color: rgba(59, 130, 246, 0.35);
+  color: #60a5fa;
 }

@@ -20,8 +20,8 @@ type Answers = {
     <div class="container section-padding">
       <div class="module-header">
         <span class="badge badge-accent">HU04 · 5 Story Points</span>
-        <h1>✨ Asistente de Compatibilidad Matchmaker</h1>
-        <p class="subtitle">Test para pasos para descubrir qué mascota se adapta a tu estilo de vida.</p>
+        <h1>Guía de compatibilidad</h1>
+        <p class="subtitle">Test para descubrir qué mascota se adapta a tu estilo de vida.</p>
 
       </div>
 
@@ -184,8 +184,8 @@ export class MatchmakerContainerComponent {
     const answer = this.answers();
     return this.step() === 1 ? !!answer.housing
       : this.step() === 2 ? !!answer.time
-      : this.step() === 3 ? !!answer.energy
-      : !!answer.species;
+        : this.step() === 3 ? !!answer.energy
+          : !!answer.species;
   }
 
   select<Key extends keyof Answers>(key: Key, value: Answers[Key]): void {

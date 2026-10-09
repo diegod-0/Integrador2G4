@@ -48,7 +48,7 @@ public class RescueInboxService {
     /**
      * Bandeja de rescates dentro del radio geodésico (metros) alrededor del
      * albergue indicado, ordenada de menor a mayor distancia. Incluye tickets
-     * PENDIENTE y ASIGNADO.
+     * PENDIENTE, ASIGNADO y EN_CAMINO.
      */
     @Transactional(readOnly = true)
     public List<InboxTicketSummaryDto> obtenerBandeja(UUID albergueId, double radioMetros) {
@@ -79,9 +79,9 @@ public class RescueInboxService {
         TicketRescate ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket de rescate", ticketId));
 
-        if (ticket.getEstado() != EstadoTicket.PENDIENTE) {
+        if (ticket.getEstado() != EstadoTicket.PENDIENTE && !(ticket.getEstado() == EstadoTicket.ASIGNADO && ticket.getVoluntario() == null)) {
             throw new BusinessException(String.format(
-                    "Solo se pueden asignar tickets en estado PENDIENTE; el ticket '%s' se encuentra en estado %s.",
+                    "Solo se pueden asignar tickets en estado PENDIENTE o sin voluntario; el ticket '%s' se encuentra en estado %s.",
                     ticket.getCodigoTracking(), ticket.getEstado()));
         }
 

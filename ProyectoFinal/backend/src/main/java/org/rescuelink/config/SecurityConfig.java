@@ -48,6 +48,7 @@ public class SecurityConfig {
                                 "/api/tickets/reportar",
                                 "/api/tickets/tracking/**",
                                 "/api/tickets/verificar-duplicado",
+                                "/api/albergues/**",
                                 "/api/animales/adopcion/**",
                                 "/api/adopciones/verificar/**",
                                 "/actuator/**",

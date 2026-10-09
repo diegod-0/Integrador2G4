@@ -82,7 +82,7 @@ public interface TicketRescateRepository extends JpaRepository<TicketRescate, UU
         LEFT JOIN albergues a ON t.albergue_id = a.id AND a.deleted_at IS NULL
         LEFT JOIN usuarios u ON t.voluntario_id = u.id AND u.deleted_at IS NULL
         WHERE t.deleted_at IS NULL
-          AND t.estado IN ('PENDIENTE', 'ASIGNADO')
+          AND t.estado IN ('PENDIENTE', 'ASIGNADO', 'EN_CAMINO')
           AND ST_DWithin(
                  t.ubicacion::geography,
                  ST_SetSRID(ST_MakePoint(:lng, :lat), 4326)::geography,
