@@ -18,8 +18,8 @@ public class OpenApiConfig {
         final String securitySchemeName = "bearerAuth";
         return new OpenAPI()
                 .info(new Info()
-                        .title("RescueLink API — Backend & Persistencia Geoespacial")
-                        .description("Documentación de endpoints REST para el seguimiento espacial de rescates y gestión de adopciones.")
+                        .title("RescueLink API — Backend")
+                        .description("Documentación de endpoints REST.")
                         .version("1.0.0")
                         .contact(new Contact()
                                 .name("Diego Claros")

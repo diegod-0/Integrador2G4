@@ -47,6 +47,22 @@ export const routes: Routes = [
     title: 'Test Matchmaker · RescueLink'
   },
   {
+    path: 'albergues',
+    loadComponent: () =>
+      import('./containers/shelter-container/shelter-container.component').then(
+        m => m.ShelterContainerComponent
+      ),
+    title: 'Directorio de Albergues · RescueLink'
+  },
+  {
+    path: 'admin/bandeja',
+    loadComponent: () =>
+      import('./containers/inbox-container/inbox-container.component').then(
+        m => m.InboxContainerComponent
+      ),
+    title: 'Bandeja Operativa de Rescates · RescueLink'
+  },
+  {
     path: '**',
     redirectTo: 'catalogo'
   }

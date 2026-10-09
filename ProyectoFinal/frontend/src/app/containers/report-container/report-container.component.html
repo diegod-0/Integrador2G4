@@ -3,26 +3,65 @@
     <!-- HERO HEADER -->
     <section class="report-hero">
       <div class="hero-badge-row">
-        <span class="badge badge-danger">🚨 Emergencia Ciudadana</span>
-        <span class="badge badge-info">Respuesta en Tiempo Real</span>
+        <span class="badge badge-danger">Emergencia</span>
+        <span class="badge badge-info">Respuesta en tiempo real</span>
+        <span class="badge badge-warning">
+          HU05 · PostGIS duplicados activo
+        </span>
       </div>
-      <h1 class="hero-title">Reporte Ágil de Rescate Animal</h1>
+      <h1 class="hero-title">Reporte de rescate</h1>
       <p class="hero-desc">
-        ¿Ves un animal herido, abandonado o en peligro inminente? Envía una alerta en menos de 30 segundos sin necesidad de registro previo.
+        ¿Ves un animal herido, abandonado o en peligro inminente? Envía una alerta en menos de 30 segundos sin necesidad
+        de registro previo.
       </p>
+
+      <!-- BANNER REACTIVO DE DETECCIÓN DE DUPLICADOS (HU05) -->
+      @if (conflictError()) {
+      <div class="alert alert-danger" style="margin-top: 1rem; border-left: 4px solid var(--color-danger);"
+        role="alert">
+        <strong style="color: #f87171;">⛔ Emergencia Duplicada:</strong>
+        <p style="margin: 0.3rem 0 0; color: var(--text-main);">{{ conflictError() }}</p>
+      </div>
+      }
+
+      @if (generalError()) {
+      <div class="alert alert-danger" style="margin-top: 1rem; border-left: 4px solid var(--color-danger);"
+        role="alert">
+        <strong style="color: #f87171;">⚠️ Error de validación:</strong>
+        <p style="margin: 0.3rem 0 0; color: var(--text-main);">{{ generalError() }}</p>
+      </div>
+      }
+
+      @if (duplicateState().loading) {
+      <div class="alert alert-info" style="margin-top: 1rem; border-left: 4px solid var(--color-primary);">
+        <span>🔍 <em>Analizando radio de 50 metros con PostGIS en Docker...</em></span>
+      </div>
+      } @else if (duplicateState().checked && duplicateState().hayDuplicado) {
+      <div class="alert alert-warning" style="margin-top: 1rem; border-left: 4px solid var(--color-warning);">
+        <div style="font-weight: 600; color: #fbbf24;">⚠️ Alerta Preventiva de Duplicados (HU05):</div>
+        <div style="color: var(--text-main); font-size: 0.95rem; margin-top: 0.25rem;">
+          Se detectó un reporte activo reciente a <strong style="color: #fbbf24;">{{
+            duplicateState().incidente?.distanciaMetros ?? '0' }} metros</strong>
+          (Ticket: <code
+            style="color: #38bdf8; background: rgba(56, 189, 248, 0.15); padding: 0.1rem 0.35rem; border-radius: 4px;">{{ duplicateState().incidente?.codigoTracking }}</code>,
+          Estado: <code
+            style="color: #38bdf8; background: rgba(56, 189, 248, 0.15); padding: 0.1rem 0.35rem; border-radius: 4px;">{{ duplicateState().incidente?.estado }}</code>).
+          Por favor verifique si se trata del mismo animal para evitar movilización duplicada de rescatistas.
+        </div>
+      </div>
+      } @else if (duplicateState().checked && !duplicateState().hayDuplicado) {
+      <div class="alert alert-success"
+        style="margin-top: 1rem; border-left: 4px solid var(--color-success); font-size: 0.9rem;">
+        ✅ <strong>Zona Despejada (HU05):</strong> PostGIS verificó 0 reportes activos en 50m a la redonda.
+      </div>
+      }
     </section>
 
     <!-- FORMULARIO HIJO (DUMB COMPONENT) -->
     <main class="form-wrapper">
-      <app-report-form
-        [isSubmitting]="viewState().status === 'loading'"
-        [currentCoordinates]="currentCoordinates()"
-        [gpsState]="gpsState()"
-        [availableDistricts]="availableDistricts()"
-        (onRequestGps)="onGpsRequested()"
-        (onSelectDistrict)="onDistrictSelected($event)"
-        (onSubmitReport)="onReportSubmitted($event)"
-      />
+      <app-report-form [isSubmitting]="viewState().status === 'loading'" [currentCoordinates]="currentCoordinates()"
+        [gpsState]="gpsState()" [availableDistricts]="availableDistricts()" (onRequestGps)="onGpsRequested()"
+        (onSelectDistrict)="onDistrictSelected($event)" (onSubmitReport)="onReportSubmitted($event)" />
     </main>
   </div>
 </div>

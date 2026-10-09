@@ -47,16 +47,17 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/api/tickets/reportar",
                                 "/api/tickets/tracking/**",
+                                "/api/tickets/verificar-duplicado",
+                                "/api/albergues/**",
                                 "/api/animales/adopcion/**",
                                 "/api/adopciones/verificar/**",
                                 "/actuator/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html",
-                                "/v3/api-docs/**"
-                        ).permitAll()
+                                "/v3/api-docs/**")
+                        .permitAll()
                         // Endpoints protegidos por defecto
-                        .anyRequest().authenticated()
-                )
+                        .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

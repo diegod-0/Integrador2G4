@@ -1,0 +1,167 @@
+<div class="inbox-page section-padding">
+  <div class="container">
+    <!-- HERO HEADER -->
+    <header class="module-header">
+      <div class="badge-row">
+        <span class="badge badge-info">Módulo Administrativo</span>
+        <span class="badge badge-warning">
+          En desarrollo · HU10
+        </span>
+      </div>
+      <h1 class="hero-title">Bandeja operativa</h1>
+    </header>
+
+    <!-- BARRA DE AUTENTICACIÓN (HU09) -->
+    <section class="auth-bar card">
+      @if (authService.isAuthenticated) {
+      <div class="auth-status-logged">
+        <div class="user-info">
+          <!--<span class="shield-icon">🛡️</span>-->
+          <div>
+            <strong>Sesión Activa:</strong> {{ authService.currentUser?.nombre }}
+            <span class="role-badge">{{ authService.currentUser?.rol }}</span>
+            <small class="token-preview">JWT Bearer activo</small>
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-sm" (click)="cerrarSesion()">Cerrar sesión</button>
+      </div>
+      } @else {
+      <div class="auth-status-guest">
+        <div class="guest-warning">
+          <span><strong>Acceso (HU09):</strong> Para operar la bandeja se requiere autorización
+            JWT.</span>
+        </div>
+        <div class="quick-login-row">
+          <!--<button class="btn btn-primary" (click)="loginRapidoAdmin()" [disabled]="loginLoading()">
+            ⚡ Login Rápido Demo (Admin Diego)
+          </button> -->
+          <details class="manual-login-details">
+            <summary>Ingresar credenciales</summary>
+            <div class="login-mini-form">
+              <input type="email" [(ngModel)]="loginEmail" placeholder="Email" class="form-control form-control-sm" />
+              <input type="password" [(ngModel)]="loginPass" placeholder="Contraseña"
+                class="form-control form-control-sm" />
+              <button class="btn btn-secondary btn-sm" (click)="loginManual()"
+                [disabled]="loginLoading()">Entrar</button>
+            </div>
+          </details>
+        </div>
+      </div>
+      }
+    </section>
+
+    <!-- ALERTAS DE ÉXITO O ERROR -->
+    @if (successMessage()) {
+    <div class="alert alert-success" style="margin-top: 1rem;">
+      ✅ {{ successMessage() }}
+    </div>
+    }
+    @if (errorMessage()) {
+    <div class="alert alert-danger" style="margin-top: 1rem;">
+      ⚠️ {{ errorMessage() }}
+    </div>
+    }
+
+    <!-- CONTENIDO PRINCIPAL: BANDEJA OPERATIVA -->
+    @if (authService.isAuthenticated) {
+    <div class="inbox-controls card" style="margin-top: 1.5rem;">
+      <div class="controls-grid">
+        <div class="control-group">
+          <label for="albergueSelect" class="form-label">
+            🏢 Albergue de referencia:
+          </label>
+          <select id="albergueSelect" [ngModel]="selectedAlbergueId" (ngModelChange)="cambiarAlbergue($event)"
+            class="form-control">
+            @for (alb of albergues; track alb.id) {
+            <option [value]="alb.id">{{ alb.nombre }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="radioSelect" class="form-label">
+            📡 Radio de cobertura:
+          </label>
+          <select id="radioSelect" [ngModel]="selectedRadioMetros" (ngModelChange)="cambiarRadio($event)"
+            class="form-control">
+            @for (r of radios; track r.metros) {
+            <option [value]="r.metros">{{ r.label }}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTADO DE TICKETS -->
+    <section class="tickets-section" style="margin-top: 1.5rem;">
+      @if (loading()) {
+      <div class="card status-card">
+        <p>Consultando distancias geodésicas en PostGIS...</p>
+      </div>
+      } @else if (tickets().length === 0) {
+      <div class="card status-card">
+        <p>No hay tickets pendientes o asignados en el radio seleccionado para este albergue.</p>
+      </div>
+      } @else {
+      <div class="tickets-grid">
+        @for (ticket of tickets(); track ticket.ticketId) {
+        <article class="card ticket-card">
+          <div class="ticket-header">
+            <div class="code-and-badge">
+              <span class="ticket-code">{{ ticket.codigoTracking }}</span>
+              <span class="gravity-badge" [class.badge-danger]="ticket.gravedad === 'CRITICA'">
+                {{ ticket.gravedad }}
+              </span>
+            </div>
+            <span class="distance-pill">
+              📍 {{ formatearDistancia(ticket.distanciaMetros) }}
+            </span>
+          </div>
+
+          <p class="ticket-desc">{{ ticket.descripcion }}</p>
+
+          <div class="ticket-meta">
+            <span class="meta-item">
+              Estado: <strong [class.status-pending]="ticket.estado === 'PENDIENTE'"
+                [class.status-transit]="ticket.estado === 'EN_CAMINO'"
+                [class.status-rescued]="ticket.estado === 'RESCATADO'">{{ ticket.estado }}</strong>
+            </span>
+            @if (ticket.albergueAsignadoNombre) {
+            <span class="meta-item">
+              Albergue: <em>{{ ticket.albergueAsignadoNombre }}</em>
+            </span>
+            }
+            @if (ticket.voluntarioNombre) {
+            <span class="meta-item">
+              Voluntario: <strong>{{ ticket.voluntarioNombre }}</strong>
+            </span>
+            }
+          </div>
+
+          <!-- ACCIONES OPERATIVAS EN VIVO (HU10) -->
+          <div class="ticket-actions">
+            @if (ticket.estado === 'PENDIENTE' || !ticket.voluntarioNombre) {
+            <button class="btn btn-primary btn-sm btn-block" (click)="asignarVoluntario(ticket)">
+              🎯 Asignar a Pedro Cueto (Voluntario)
+            </button>
+            } @else {
+            <div class="state-buttons">
+              <button class="btn btn-warning btn-sm" [disabled]="ticket.estado === 'EN_CAMINO'"
+                (click)="cambiarEstado(ticket, 'EN_CAMINO')">
+                En Camino
+              </button>
+              <button class="btn btn-success btn-sm" [disabled]="ticket.estado === 'RESCATADO'"
+                (click)="cambiarEstado(ticket, 'RESCATADO')">
+                Rescatado
+              </button>
+            </div>
+            }
+          </div>
+        </article>
+        }
+      </div>
+      }
+    </section>
+    }
+  </div>
+</div>
