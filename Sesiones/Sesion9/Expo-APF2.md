@@ -135,6 +135,6 @@ flowchart TB
 
 | Recurso | Enlace Cloud Oficial | Qué demuestra |
 | :--- | :--- | :--- |
-| **Aplicación Web (Frontend)** | *Tu dominio en Vercel* (ej. `https://rescuelink.vercel.app`) | Portal ciudadano, reportes, adopciones y bandeja operativa en vivo. |
+| **Aplicación Web (Frontend)** | https://rescuelink-phi.vercel.app/catalogo | Portal ciudadano, reportes, adopciones y bandeja operativa en vivo. |
 | **Swagger UI Oficial (API)** | [https://rescuelink-backend-xirg.onrender.com/swagger-ui/index.html](https://rescuelink-backend-xirg.onrender.com/swagger-ui/index.html) | Documentación interactiva de todos los endpoints protegidos y públicos. |
 | **Semáforo de Salud (Actuator)** | [https://rescuelink-backend-xirg.onrender.com/actuator/health](https://rescuelink-backend-xirg.onrender.com/actuator/health) | Conectividad saludable y en tiempo real con PostgreSQL en Supabase. |
