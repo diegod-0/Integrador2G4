@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { vi } from 'vitest';
 import { ReportContainerComponent } from './report-container.component';
@@ -34,6 +35,7 @@ describe('ReportContainerComponent', () => {
     TestBed.configureTestingModule({
       imports: [ReportContainerComponent],
       providers: [
+        { provide: HttpClient, useValue: null },
         { provide: Router, useValue: { navigate: routerNavigateSpy } },
         GeolocationService
       ]

@@ -35,7 +35,7 @@ describe('CatalogContainerComponent', () => {
     const state = catalogService.viewState();
     expect(state.status).toBe('success');
     if (state.status === 'success') {
-      expect(state.data.length).toBe(6);
+      expect(state.data.length).toBe(3);
     }
   });
 

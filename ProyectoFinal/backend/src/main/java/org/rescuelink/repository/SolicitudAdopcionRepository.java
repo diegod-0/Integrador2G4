@@ -13,4 +13,5 @@ public interface SolicitudAdopcionRepository extends JpaRepository<SolicitudAdop
     Optional<SolicitudAdopcion> findByCodigoCertificadoQr(String codigoCertificadoQr);
     List<SolicitudAdopcion> findByAnimalId(UUID animalId);
     List<SolicitudAdopcion> findByAdoptanteId(UUID adoptanteId);
+    Optional<SolicitudAdopcion> findByAnimalIdAndAdoptanteId(UUID animalId, UUID adoptanteId);
 }

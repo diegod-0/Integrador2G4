@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RescueLink - Reporte de pruebas de calidad (Unidad 3)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --border: #334155;
+      --text: #f1f5f9;
+      --muted: #94a3b8;
+      --blue: #38bdf8;
+      --green: #22c55e;
+      --amber: #f59e0b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2rem 1.5rem;
+    }
+    .wrapper { max-width: 1180px; margin: 0 auto; }
+    
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.25rem;
+      margin-bottom: 1.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    h1 { font-size: 1.6rem; font-weight: 700; color: #fff; }
+    .sub { color: var(--muted); font-size: 0.9rem; margin-top: 0.25rem; }
+    .meta-tag {
+      font-size: 0.82rem;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+    }
+
+    /* Tarjetas superiores */
+    .summary-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.15rem 1.25rem;
+    }
+    .stat-title { font-size: 0.85rem; color: var(--muted); }
+    .stat-num { font-size: 1.85rem; font-weight: 700; margin: 0.3rem 0; color: #fff; }
+    .stat-desc { font-size: 0.8rem; color: #cbd5e1; }
+
+    /* Bloques de los 3 temas */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.35rem;
+    }
+    .card h2 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid var(--border);
+      color: #fff;
+    }
+    .item { margin-bottom: 0.95rem; }
+    .item-head {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.86rem;
+      margin-bottom: 0.3rem;
+    }
+    .bar-bg {
+      height: 8px;
+      background: #0f172a;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .bar-fill { height: 100%; background: var(--blue); border-radius: 4px; }
+    .bar-fill.ok { background: var(--green); }
+    .bar-fill.warn { background: var(--amber); }
+    .tools-note {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 1rem;
+      padding-top: 0.6rem;
+      border-top: 1px dashed var(--border);
+    }
+
+    /* Tabla */
+    .table-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.35rem;
+    }
+    .table-box h2 { font-size: 1.05rem; margin-bottom: 1rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.86rem; }
+    th, td {
+      padding: 0.7rem 0.8rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    th { color: var(--muted); font-weight: 600; font-size: 0.78rem; }
+    code {
+      font-family: Consolas, monospace;
+      font-size: 0.8rem;
+      background: #0f172a;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      color: var(--blue);
+    }
+    .ok-text { color: var(--green); font-weight: 600; }
+
+    .links-row {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-top: 1.25rem;
+    }
+    .link-btn {
+      display: inline-block;
+      padding: 0.55rem 1rem;
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.84rem;
+    }
+    .link-btn:hover { border-color: var(--blue); color: var(--blue); }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <header>
+      <div>
+        <h1>RescueLink — Resumen de pruebas de calidad</h1>
+        <p class="sub">Curso Integrador II · Unidad 3 (Funcionalidad, compatibilidad y usabilidad) · Grupo 4</p>
+      </div>
+      <div class="meta-tag">Rama: dev · Estado: Pruebas en verde</div>
+    </header>
+
+    <section class="summary-row">
+      <div class="stat-box">
+        <div class="stat-title">Pruebas unitarias (backend y frontend)</div>
+        <div class="stat-num">100% ok</div>
+        <div class="stat-desc">JUnit 5 en Java y Vitest en Angular</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-title">Cobertura y pruebas de mutación</div>
+        <div class="stat-num">83% / 86%</div>
+        <div class="stat-desc">Cobertura en servicios (JaCoCo) y eficacia en PITest</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-title">Pruebas con servicio externo</div>
+        <div class="stat-num">4 de 4</div>
+        <div class="stat-desc">Simulación de API de correos con WireMock</div>
+      </div>
+
+      <div class="stat-box">
+        <div class="stat-title">Accesibilidad y usabilidad</div>
+        <div class="stat-num">88.5 / 100</div>
+        <div class="stat-desc">Puntaje SUS con usuarios y 0 errores críticos en Axe</div>
+      </div>
+    </section>
+
+    <section class="grid-3">
+      <!-- 1. Funcionalidad -->
+      <div class="card">
+        <h2>1. Funcionalidad</h2>
+        <div class="item">
+          <div class="item-head"><span>Funciones principales terminadas (10 de 10)</span><strong>100%</strong></div>
+          <div class="bar-bg"><div class="bar-fill ok" style="width: 100%"></div></div>
+        </div>
+        <div class="item">
+          <div class="item-head"><span>Cálculos de distancia GPS (PostGIS / Haversine) y QR</span><strong>100%</strong></div>
+          <div class="bar-bg"><div class="bar-fill ok" style="width: 100%"></div></div>
+        </div>
+        <div class="item">
+          <div class="item-head"><span>Cobertura de código en capa de servicios (JaCoCo)</span><strong>83%</strong></div>
+          <div class="bar-bg"><div class="bar-fill" style="width: 83%"></div></div>
+        </div>
+        <div class="item">
+          <div class="item-head"><span>Eficacia de tests frente a mutaciones (PITest)</span><strong>86%</strong></div>
+          <div class="bar-bg"><div class="bar-fill" style="width: 86%"></div></div>
+        </div>
+        <p class="tools-note">Herramientas: JUnit 5, Mockito, JaCoCo, PITest y Vitest.</p>
+      </div>
+
+      <!-- 2. Compatibilidad -->
+      <div class="card">
+        <h2>2. Compatibilidad</h2>
+        <div class="item">
+          <div class="item-head"><span>Envío a API externa de correos (Resend) sin duplicados</span><strong>100%</strong></div>
+          <div class="bar-bg"><div class="bar-fill ok" style="width: 100%"></div></div>
+        </div>
+        <div class="item">
+          <div class="item-head"><span>Respuesta ante caída externa (error 503 y timeout de 3s)</span><strong>100%</strong></div>
+          <div class="bar-bg"><div class="bar-fill ok" style="width: 100%"></div></div>
+        </div>
+        <div class="item">
+          <div class="item-head"><span>Dos instancias corriendo juntas en Docker sin chocar puertos</span><strong>100%</strong></div>
+          <div class="bar-bg"><div class="bar-fill warn" style="width: 100%"></div></div>
+        </div>
+        <div class="item">
+          <div class="item-head"><span>Formato estándar de errores HTTP (RFC 7807)</span><strong>100%</strong></div>
+          <div class="bar-bg"><div class="bar-fill warn" style="width: 100%"></div></div>
+        </div>
+        <p class="tools-note">Herramientas: WireMock, RestClient (Spring), Swagger y Docker Compose.</p>
+      </div>
+
+      <!-- 3. Usabilidad -->
+      <div class="card">
+        <h2>3. Usabilidad e interacción</h2>
+        <div class="item">
+          <div class="item-head"><span>Revisión de accesibilidad web (contraste, teclado y zoom 200%)</span><strong>96 / 100</strong></div>
+          <div class="bar-bg"><div class="bar-fill" style="width: 96%"></div></div>
+        </div>
+        <div class="item">
+          <div class="item-head"><span>Bloqueo de formularios incompletos y aviso de reporte repetido</span><strong>100%</strong></div>
+          <div class="bar-bg"><div class="bar-fill ok" style="width: 100%"></div></div>
+        </div>
+        <div class="item">
+          <div class="item-head"><span>Facilidad por tarea según usuarios (encuesta SEQ: 6.6 de 7)</span><strong>94%</strong></div>
+          <div class="bar-bg"><div class="bar-fill" style="width: 94%"></div></div>
+        </div>
+        <div class="item">
+          <div class="item-head"><span>Puntaje general de usabilidad (encuesta SUS: 88.5 de 100)</span><strong>88.5%</strong></div>
+          <div class="bar-bg"><div class="bar-fill" style="width: 88.5%"></div></div>
+        </div>
+        <p class="tools-note">Herramientas: Playwright, Axe-core, Google Lighthouse y encuestas SEQ / SUS.</p>
+      </div>
+    </section>
+
+    <section class="table-box">
+      <h2>Detalle de pruebas ejecutadas en el proyecto</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Área evaluada</th>
+            <th>Qué se probó</th>
+            <th>Programa usado</th>
+            <th>Archivo o comando</th>
+            <th>Resultado</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Funcionalidad</td>
+            <td>Reglas de negocio (reportes, albergues, login, adopciones)</td>
+            <td><code>JUnit 5 + Mockito</code></td>
+            <td><code>mvn test</code> (8 clases de prueba)</td>
+            <td>Todos los tests pasan sin errores</td>
+            <td class="ok-text">Correcto</td>
+          </tr>
+          <tr>
+            <td>Funcionalidad</td>
+            <td>Porcentaje de código cubierto y calidad de los tests</td>
+            <td><code>JaCoCo + PITest</code></td>
+            <td><code>target/site/jacoco</code> y <code>pit-reports</code></td>
+            <td>83% líneas servicios / 86% eficacia mutación</td>
+            <td class="ok-text">Correcto</td>
+          </tr>
+          <tr>
+            <td>Funcionalidad</td>
+            <td>Componentes de Angular, cálculo de distancia y fotos</td>
+            <td><code>Vitest</code></td>
+            <td><code>npm run test:ci</code></td>
+            <td>15 archivos <code>.spec.ts</code> (55 tests) en verde</td>
+            <td class="ok-text">Correcto</td>
+          </tr>
+          <tr>
+            <td>Compatibilidad</td>
+            <td>Conexión con API externa de correos, caída 503 y corte por tiempo</td>
+            <td><code>WireMock</code></td>
+            <td><code>ResendNotificationAdapterWireMockTest</code></td>
+            <td>4 casos probados (no tumba la BD local)</td>
+            <td class="ok-text">Correcto</td>
+          </tr>
+          <tr>
+            <td>Compatibilidad</td>
+            <td>Levantar 2 entornos separados al mismo tiempo (coexistencia)</td>
+            <td><code>Docker Compose</code></td>
+            <td><code>docker-compose.coexistence.yml</code></td>
+            <td>Puertos 5434/5435 y 8080/8081 sin cruce</td>
+            <td class="ok-text">Correcto</td>
+          </tr>
+          <tr>
+            <td>Usabilidad</td>
+            <td>Navegación en navegador, bloqueo de errores y accesibilidad</td>
+            <td><code>Playwright + Axe</code></td>
+            <td><code>e2e/quality-iso25010.spec.ts</code></td>
+            <td>0 fallos críticos WCAG · SUS 88.5</td>
+            <td class="ok-text">Correcto</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="links-row">
+        <a class="link-btn" href="../../ProyectoFinal/backend/target/site/jacoco/index.html" target="_blank">Ver reporte de JaCoCo</a>
+        <a class="link-btn" href="../../ProyectoFinal/backend/target/pit-reports/index.html" target="_blank">Ver reporte de PITest</a>
+        <a class="link-btn" href="../../ProyectoFinal/frontend/playwright-report/index.html" target="_blank">Ver reporte de Playwright</a>
+        <a class="link-btn" href="https://rescuelink-backend-xirg.onrender.com/swagger-ui/index.html" target="_blank">Abrir Swagger en Render</a>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

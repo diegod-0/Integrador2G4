@@ -1,0 +1,144 @@
+# =============================================================================
+# RESCUELINK - ORQUESTACIÓN DE COEXISTENCIA MULTI-INSTANCIA (ISO/IEC 25010:2023)
+# Evidencia de Unidad 3 (Semana 11): Aislamiento estricto de puertos, bases de
+# datos, volúmenes persistentes, redes, recursos y rotación de logs sin colisión.
+# =============================================================================
+services:
+
+  # ---------------------------------------------------------------------------
+  # INSTANCIA A (PRIMARIA): Puertos Host 5434 (DB) y 8080 (API)
+  # ---------------------------------------------------------------------------
+  postgres-primary:
+    image: postgis/postgis:17-3.5-alpine
+    container_name: rescuelink-postgres-primary
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-rescuelink_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "${POSTGRES_PORT:-5434}:5432"
+    volumes:
+      - pg_primary_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d rescuelink_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "rescuelink-db-primary"
+    networks:
+      - rescuelink-primary-net
+
+  backend-primary:
+    build:
+      context: ./ProyectoFinal/backend
+      dockerfile: Dockerfile
+    container_name: rescuelink-backend-primary
+    depends_on:
+      postgres-primary:
+        condition: service_healthy
+    environment:
+      PORT: 8080
+      DB_HOST: postgres-primary
+      DB_PORT: 5432
+      DB_NAME: rescuelink_db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      RESEND_ENABLED: "false"
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health | grep UP || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "rescuelink-api-primary"
+    networks:
+      - rescuelink-primary-net
+
+  # ---------------------------------------------------------------------------
+  # INSTANCIA B (COEXISTENTE AISLADA): Puertos Host 5435 (DB) y 8081 (API)
+  # Demuestra coexistencia en el mismo servidor sin interferencia de estado
+  # ---------------------------------------------------------------------------
+  postgres-coexistence:
+    image: postgis/postgis:17-3.5-alpine
+    container_name: rescuelink-postgres-coexistence
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: rescuelink_coexistence_db
+      POSTGRES_USER: postgres_coex
+      POSTGRES_PASSWORD: postgres_coex_pass
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5435:5432"
+    volumes:
+      - pg_coexistence_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres_coex -d rescuelink_coexistence_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "rescuelink-db-coexistence"
+    networks:
+      - rescuelink-coexistence-net
+
+  backend-coexistence:
+    build:
+      context: ./ProyectoFinal/backend
+      dockerfile: Dockerfile
+    container_name: rescuelink-backend-coexistence
+    depends_on:
+      postgres-coexistence:
+        condition: service_healthy
+    environment:
+      PORT: 8081
+      DB_HOST: postgres-coexistence
+      DB_PORT: 5432
+      DB_NAME: rescuelink_coexistence_db
+      DB_USER: postgres_coex
+      DB_PASSWORD: postgres_coex_pass
+      RESEND_ENABLED: "false"
+    ports:
+      - "8081:8081"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8081/actuator/health | grep UP || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "rescuelink-api-coexistence"
+    networks:
+      - rescuelink-coexistence-net
+
+networks:
+  rescuelink-primary-net:
+    driver: bridge
+  rescuelink-coexistence-net:
+    driver: bridge
+
+volumes:
+  pg_primary_data:
+    driver: local
+  pg_coexistence_data:
+    driver: local
+

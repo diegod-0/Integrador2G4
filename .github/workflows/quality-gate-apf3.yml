@@ -1,0 +1,63 @@
+name: Quality Gate APF3 · ISO/IEC 25010 (Funcionalidad, Compatibilidad e Interacción)
+
+on:
+  push:
+    branches: [ main, dev, desarrollo-backend, desarrollo-frontend ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  backend-quality-gate:
+    name: "Backend: V&V, Interoperabilidad (WireMock) & Cobertura JaCoCo"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ProyectoFinal/backend
+
+    steps:
+      - name: Checkout del Monorepo
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21 LTS (Temurin)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Ejecutar Suite de Pruebas (JUnit 5 + Mockito + WireMock) y Reporte JaCoCo
+        run: mvn -B test jacoco:report
+
+      - name: Publicar Artefacto de Evidencia JaCoCo (ISO 25010)
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-report
+          path: ProyectoFinal/backend/target/site/jacoco/
+
+  frontend-quality-gate:
+    name: "Frontend: Pruebas Unitarias (Vitest) & Build WPO"
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ProyectoFinal/frontend
+
+    steps:
+      - name: Checkout del Monorepo
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js 22 LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: ./ProyectoFinal/frontend/package-lock.json
+
+      - name: Instalar dependencias limpias
+        run: npm ci
+
+      - name: Ejecutar Suite Unitaria Frontend (Vitest)
+        run: npm test -- --watch=false
+
+      - name: Verificar Presupuestos de Compilación (Build Budgets)
+        run: npm run build
+

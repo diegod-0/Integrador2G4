@@ -9,7 +9,7 @@ import {
 
 @Injectable({ providedIn: 'root' })
 export class TrackingService {
-  private readonly http = inject(HttpClient);
+  private readonly http = inject(HttpClient, { optional: true });
   private readonly _state = signal<ViewState<TicketRescate>>({ status: 'idle' });
   readonly state = this._state.asReadonly();
 
@@ -27,6 +27,11 @@ export class TrackingService {
     this._state.set({ status: 'loading' });
 
     // Intento primario: Conexión HTTP real con Spring Boot / PostgreSQL
+    if (!this.http) {
+      this.loadFromFallback(code);
+      return;
+    }
+
     this.http.get<any>(`/api/tickets/tracking/${code}`).subscribe({
       next: (response) => {
         if (response && response.data) {
@@ -45,6 +50,7 @@ export class TrackingService {
   }
 
   private loadFromFallback(code: string): void {
+    setTimeout(() => {
     try {
       const tickets = this.readTickets();
       const ticket = tickets.find(
@@ -66,6 +72,7 @@ export class TrackingService {
         message: 'No se pudo leer el almacenamiento local. Intenta nuevamente.',
       });
     }
+    }, 300);
   }
 
   private mapBackendResponse(t: any): TicketRescate {

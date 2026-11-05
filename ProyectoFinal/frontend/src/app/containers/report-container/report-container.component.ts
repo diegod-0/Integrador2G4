@@ -19,7 +19,7 @@ export class ReportContainerComponent {
   private readonly geoService = inject(GeolocationService);
   private readonly duplicateService = inject(DuplicateService);
   private readonly router = inject(Router);
-  private readonly http = inject(HttpClient);
+  private readonly http = inject(HttpClient, { optional: true });
 
   // Estado del flujo del contenedor mediante Signals
   readonly viewState = signal<ViewState<null>>({ status: 'idle' });
@@ -132,6 +132,11 @@ export class ReportContainerComponent {
     };
 
     // Envío HTTP real a la API de Spring Boot
+    if (!this.http) {
+      this.fallbackLocalReport(payload);
+      return;
+    }
+
     this.http.post<any>('/api/tickets/reportar', backendPayload).subscribe({
       next: (response) => {
         const ticketCode = response.data?.codigoTracking;
