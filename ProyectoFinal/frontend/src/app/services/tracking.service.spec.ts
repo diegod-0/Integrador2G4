@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { HttpClient } from '@angular/common/http';
 import { vi } from 'vitest';
 import { trackingMockTickets, TRACKING_STORAGE_KEY } from '../mocks/tracking.mocks';
 import { TrackingService } from './tracking.service';
@@ -17,7 +18,9 @@ describe('TrackingService', () => {
       },
       configurable: true,
     });
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [{ provide: HttpClient, useValue: null }]
+    });
     service = TestBed.inject(TrackingService);
   });
 

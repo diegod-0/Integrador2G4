@@ -50,6 +50,7 @@ public class SecurityConfig {
                                 "/api/tickets/verificar-duplicado",
                                 "/api/albergues/**",
                                 "/api/animales/adopcion/**",
+                                "/api/adopciones/postular",
                                 "/api/adopciones/verificar/**",
                                 "/actuator/**",
                                 "/swagger-ui/**",
@@ -78,7 +79,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With", "Accept", "Idempotency-Key"));
         configuration.setAllowCredentials(true);
         configuration.setMaxAge(3600L);
 

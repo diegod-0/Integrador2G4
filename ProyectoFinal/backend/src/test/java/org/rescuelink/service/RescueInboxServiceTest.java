@@ -245,6 +245,7 @@ class RescueInboxServiceTest {
         UUID ticketId = UUID.randomUUID();
         TicketRescate ticket = ticketPendiente(ticketId, "TR-555");
         ticket.setEstado(EstadoTicket.ASIGNADO);
+ticket.setVoluntario(Usuario.builder().id(UUID.randomUUID()).build());
         when(ticketRepository.findById(ticketId)).thenReturn(Optional.of(ticket));
 
         BusinessException ex = assertThrows(BusinessException.class, () -> rescueInboxService.asignarRescate(
@@ -379,3 +380,5 @@ class RescueInboxServiceTest {
         verify(ticketRepository, never()).save(any(TicketRescate.class));
     }
 }
+
+
